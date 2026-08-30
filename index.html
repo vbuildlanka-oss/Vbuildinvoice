@@ -1,0 +1,1608 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>VBUILD · Invoices</title>
+<meta name="robots" content="noindex">
+<style>
+/* ============================================================
+   VBUILD Invoices — design tokens
+   ============================================================ */
+:root{
+  --accent:#e2560a;
+  --accent-soft:#fdf0e7;
+  --ink:#15171b;
+  --ink-2:#565d67;
+  --ink-3:#8b929c;
+  --line:#e4dfd6;
+  --line-2:#f0ece5;
+  --bg:#f6f3ee;
+  --card:#fff;
+  --radius:14px;
+  --shadow-sm:0 1px 2px rgba(20,22,26,.06), 0 1px 3px rgba(20,22,26,.04);
+  --shadow-md:0 10px 30px -12px rgba(20,22,26,.18), 0 2px 6px rgba(20,22,26,.05);
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+*,*::before,*::after{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  font-family:var(--sans);
+  background:var(--bg);
+  color:var(--ink);
+  -webkit-font-smoothing:antialiased;
+  font-size:15px;
+  line-height:1.5;
+}
+button{font:inherit;color:inherit;cursor:pointer}
+input,select,textarea{font:inherit;color:inherit}
+h1,h2,h3,h4,p{margin:0}
+.num{font-variant-numeric:tabular-nums}
+
+/* ============================================================ topbar */
+.topbar{
+  position:sticky;top:0;z-index:40;
+  display:flex;align-items:center;gap:14px;
+  padding:14px 22px;
+  background:rgba(246,243,238,.86);
+  backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--line);
+}
+.logo{display:flex;align-items:center;gap:10px;background:none;border:0;padding:0}
+.logo-mark{
+  width:30px;height:30px;border-radius:9px;
+  background:var(--ink);color:#fff;
+  display:grid;place-items:center;
+  font-weight:800;font-size:13px;letter-spacing:-.5px;
+}
+.logo-mark::after{content:"VB"}
+.logo-text{font-weight:700;letter-spacing:-.2px}
+.logo-text span{color:var(--ink-3);font-weight:500}
+.topbar-spacer{flex:1}
+
+/* ============================================================ buttons */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  border:1px solid var(--line);background:var(--card);
+  padding:9px 15px;border-radius:10px;
+  font-size:14px;font-weight:600;
+  box-shadow:var(--shadow-sm);
+  transition:transform .12s ease, box-shadow .12s ease, background .12s ease, border-color .12s ease;
+  white-space:nowrap;
+}
+.btn:hover{border-color:#d3ccc0;transform:translateY(-1px)}
+.btn:active{transform:translateY(0)}
+.btn-primary{background:var(--ink);border-color:var(--ink);color:#fff}
+.btn-primary:hover{background:#000;border-color:#000}
+.btn-accent{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn-accent:hover{filter:brightness(1.06)}
+.btn-ghost{background:transparent;border-color:transparent;box-shadow:none;color:var(--ink-2)}
+.btn-ghost:hover{background:rgba(20,22,26,.05);border-color:transparent}
+.btn-sm{padding:6px 11px;font-size:13px;border-radius:8px}
+.btn-icon{padding:7px;width:32px;height:32px;border-radius:8px}
+
+/* ============================================================ screens */
+.screen{display:none}
+.screen.is-active{display:block}
+
+/* ============================================================ home */
+.home{max-width:940px;margin:0 auto;padding:56px 22px 90px}
+.hello{font-size:13px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--accent)}
+.home h1{font-size:clamp(28px,4.4vw,42px);letter-spacing:-1.2px;margin:12px 0 10px;font-weight:700}
+.home .lede{color:var(--ink-2);max-width:46ch;font-size:17px}
+.choices{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px;margin-top:36px}
+.choice{
+  position:relative;text-align:left;
+  background:var(--card);border:1px solid var(--line);border-radius:18px;
+  padding:26px 24px 22px;box-shadow:var(--shadow-sm);
+  transition:transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+  overflow:hidden;
+}
+.choice::before{
+  content:"";position:absolute;inset:0 0 auto 0;height:3px;
+  background:var(--accent);opacity:0;transition:opacity .15s ease;
+}
+.choice:hover{transform:translateY(-3px);box-shadow:var(--shadow-md);border-color:#d8d1c4}
+.choice:hover::before{opacity:1}
+.choice-ic{
+  width:40px;height:40px;border-radius:12px;background:var(--accent-soft);
+  display:grid;place-items:center;margin-bottom:16px;
+}
+.choice-ic svg{width:20px;height:20px;stroke:var(--accent);fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.choice h3{font-size:19px;letter-spacing:-.3px;margin-bottom:6px}
+.choice p{color:var(--ink-2);font-size:14.5px}
+.choice .arrow{margin-top:18px;font-weight:600;font-size:14px;color:var(--accent);display:flex;align-items:center;gap:6px}
+svg.ar{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none;transition:transform .15s ease}
+.choice:hover svg.ar{transform:translateX(3px)}
+svg.ar.back{transform:rotate(180deg)}
+
+.recent{margin-top:52px}
+.recent-head{display:flex;align-items:baseline;gap:12px;margin-bottom:14px}
+.recent-head h2{font-size:15px;letter-spacing:.02em}
+.recent-head .count{color:var(--ink-3);font-size:13px}
+.rlist{display:flex;flex-direction:column;gap:8px}
+.ritem{
+  display:flex;align-items:center;gap:14px;
+  background:var(--card);border:1px solid var(--line);border-radius:12px;
+  padding:12px 14px;
+}
+.ritem .rno{font-family:var(--mono);font-size:12.5px;font-weight:600}
+.ritem .rwho{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--ink-2);font-size:14px}
+.ritem .ramt{font-weight:600;font-size:14px}
+.tag{
+  font-size:10.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;
+  padding:3px 7px;border-radius:5px;background:var(--line-2);color:var(--ink-2);
+}
+.tag.pf{background:var(--accent-soft);color:#b8460b}
+.tag.fi{background:#e8f2ec;color:#1d6b4a}
+.empty{
+  border:1px dashed var(--line);border-radius:12px;padding:26px;
+  text-align:center;color:var(--ink-3);font-size:14px;background:rgba(255,255,255,.5);
+}
+
+/* ============================================================ editor */
+.editor{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.06fr);gap:0;min-height:calc(100vh - 59px)}
+.pane-form{padding:26px 26px 120px;border-right:1px solid var(--line);min-width:0}
+.pane-view{padding:26px;background:#efeae2;min-width:0}
+.pane-inner{position:sticky;top:83px}
+.form-wrap{max-width:560px;margin:0 auto}
+.eyebrow{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+.eyebrow h1{font-size:22px;letter-spacing:-.5px}
+.eyebrow-sub{color:var(--ink-2);font-size:14px;margin-bottom:26px}
+
+.block{border-top:1px solid var(--line);padding:22px 0}
+.block:first-of-type{border-top:0;padding-top:6px}
+.block-h{display:flex;align-items:center;gap:9px;margin-bottom:14px}
+.block-h .step{
+  width:20px;height:20px;border-radius:6px;background:var(--ink);color:#fff;
+  font-size:11px;font-weight:700;display:grid;place-items:center;flex:none;
+}
+.block-h h2{font-size:14.5px;letter-spacing:-.1px}
+.block-h .hint{color:var(--ink-3);font-size:13px;font-weight:400}
+
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+.field{display:flex;flex-direction:column;gap:5px;min-width:0}
+.field.span2{grid-column:span 2}
+label{font-size:12.5px;font-weight:600;color:var(--ink-2)}
+.ctl{
+  width:100%;background:var(--card);border:1px solid var(--line);border-radius:9px;
+  padding:9px 11px;font-size:14px;
+  transition:border-color .12s ease, box-shadow .12s ease;
+}
+.ctl:focus{outline:0;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+textarea.ctl{resize:vertical;min-height:66px;line-height:1.45}
+select.ctl{appearance:none;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'><path d='M3 4.5 6 8l3-3.5' fill='none' stroke='%23565d67' stroke-width='1.4' stroke-linecap='round' stroke-linejoin='round'/></svg>");background-repeat:no-repeat;background-position:right 10px center;padding-right:30px}
+.help{font-size:12px;color:var(--ink-3)}
+
+/* line items */
+.items-ed{display:flex;flex-direction:column;gap:8px}
+.item-row{display:grid;grid-template-columns:1fr 68px 108px 30px;gap:8px;align-items:center}
+.item-head{display:grid;grid-template-columns:1fr 68px 108px 30px;gap:8px}
+.item-head span{font-size:11.5px;font-weight:600;color:var(--ink-3);letter-spacing:.03em}
+.item-head span:nth-child(2),.item-head span:nth-child(3){text-align:right}
+.item-row .ctl.r{text-align:right}
+.x{
+  border:1px solid transparent;background:transparent;color:var(--ink-3);
+  width:30px;height:30px;border-radius:8px;display:grid;place-items:center;font-size:16px;line-height:1;
+}
+.x:hover{background:#fdeceb;color:#c0392b}
+.items-foot{display:flex;justify-content:space-between;align-items:center;margin-top:12px;gap:10px}
+.mini-total{font-size:13px;color:var(--ink-2)}
+.mini-total b{color:var(--ink)}
+
+/* segmented control */
+.seg{display:inline-flex;background:var(--line-2);border-radius:10px;padding:3px;gap:3px}
+.seg button{
+  border:0;background:transparent;padding:7px 14px;border-radius:8px;
+  font-size:13.5px;font-weight:600;color:var(--ink-2);transition:all .12s ease;
+}
+.seg button.on{background:var(--card);color:var(--ink);box-shadow:var(--shadow-sm)}
+.seg.wide{display:grid;grid-template-columns:1fr 1fr;width:100%}
+
+/* the big yes/no question */
+.ask{
+  background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+  padding:18px;box-shadow:var(--shadow-sm);
+}
+.ask-q{font-size:15.5px;font-weight:650;letter-spacing:-.2px;margin-bottom:4px}
+.ask-sub{color:var(--ink-3);font-size:13px;margin-bottom:14px}
+.yn{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.yn button{
+  border:1.5px solid var(--line);background:var(--bg);border-radius:11px;
+  padding:13px 14px;text-align:left;font-weight:650;font-size:14.5px;
+  transition:all .13s ease;
+}
+.yn button small{display:block;font-weight:400;font-size:12.5px;color:var(--ink-3);margin-top:2px}
+.yn button:hover{border-color:#d3ccc0}
+.yn button.on{border-color:var(--accent);background:var(--accent-soft);color:#a53f07}
+.yn button.on small{color:#b8560f}
+.reveal{margin-top:16px;padding-top:16px;border-top:1px dashed var(--line)}
+
+/* chips */
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.chip{
+  border:1px solid var(--line);background:var(--card);border-radius:99px;
+  padding:4px 11px;font-size:12.5px;font-weight:600;color:var(--ink-2);
+}
+.chip:hover{border-color:var(--accent);color:var(--accent)}
+
+/* sticky actions */
+.actions{
+  position:fixed;bottom:0;left:0;width:50%;
+  display:flex;gap:10px;align-items:center;
+  padding:14px 26px;
+  background:linear-gradient(to top,var(--bg) 62%,rgba(246,243,238,0));
+  z-index:30;
+}
+.actions .grow{flex:1}
+
+/* preview chrome */
+.view-bar{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.view-bar .lbl{font-size:12px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3)}
+.view-scroll{max-height:calc(100vh - 150px);overflow:auto;border-radius:6px}
+
+/* ============================================================ settings */
+.settings{max-width:720px;margin:0 auto;padding:36px 22px 90px}
+.settings h1{font-size:26px;letter-spacing:-.7px;margin-bottom:6px}
+.settings .lede{color:var(--ink-2);margin-bottom:28px}
+.logo-drop{display:flex;align-items:center;gap:16px}
+.logo-prev{
+  width:82px;height:82px;border-radius:12px;border:1px dashed var(--line);
+  background:var(--card);display:grid;place-items:center;overflow:hidden;flex:none;
+}
+.logo-prev img{max-width:100%;max-height:100%;object-fit:contain}
+.logo-prev span{font-size:11px;color:var(--ink-3)}
+.swatches{display:flex;gap:8px;flex-wrap:wrap}
+.sw{width:30px;height:30px;border-radius:9px;border:2px solid transparent;box-shadow:var(--shadow-sm);padding:0}
+.sw.on{border-color:var(--ink)}
+
+/* ============================================================ toast */
+#toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(20px);z-index:80;
+  background:var(--ink);color:#fff;padding:11px 18px;border-radius:11px;font-size:14px;font-weight:500;
+  opacity:0;pointer-events:none;transition:all .22s ease;box-shadow:var(--shadow-md)}
+#toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* ============================================================
+   THE DOCUMENT — this is what the client sees.
+   Only VBUILD's brand and the client's data live in here.
+   ============================================================ */
+.doc{
+  background:#fff;color:#15171b;
+  width:100%;max-width:794px;margin:0 auto;
+  box-shadow:var(--shadow-md);
+  font-size:11.4px;line-height:1.55;
+  padding:44px 46px 40px;
+  position:relative;
+}
+.doc .rule-top{position:absolute;top:0;left:0;right:0;height:5px;background:var(--accent)}
+.doc-head{display:flex;justify-content:space-between;gap:30px;align-items:flex-start;padding-top:4px}
+.doc-brand{max-width:56%}
+.doc-logo{max-height:52px;max-width:200px;display:block;margin-bottom:10px}
+.doc-word{font-size:25px;font-weight:800;letter-spacing:-.9px;line-height:1;margin-bottom:3px}
+.doc-word em{color:var(--accent);font-style:normal}
+.doc-tag{font-size:10.6px;color:#6b7280;letter-spacing:.02em;margin-bottom:9px}
+.doc-org{font-size:10.6px;color:#4b5058;line-height:1.62;white-space:pre-line}
+.doc-title{text-align:right;flex:none}
+.doc-kicker{
+  font-size:16.5px;font-weight:800;letter-spacing:.11em;text-transform:uppercase;
+  color:var(--accent);line-height:1.1;margin-bottom:12px;
+}
+table.doc-meta{border-collapse:collapse;margin-left:auto;font-size:10.6px}
+table.doc-meta td{padding:2.5px 0}
+table.doc-meta td:first-child{color:#6b7280;text-align:right;padding-right:12px;white-space:nowrap}
+table.doc-meta td:last-child{text-align:right;font-weight:650;font-variant-numeric:tabular-nums;white-space:nowrap}
+
+.doc-parties{display:grid;grid-template-columns:1fr 1fr;gap:28px;margin-top:19px;padding-top:15px;border-top:1px solid #eae5dc}
+.doc-parties h4{
+  font-size:9.4px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;
+  color:#9099a3;margin-bottom:7px;
+}
+.doc-who{font-size:13px;font-weight:700;letter-spacing:-.2px;margin-bottom:2px}
+.doc-lines{font-size:10.7px;color:#4b5058;line-height:1.6;white-space:pre-line}
+.doc-kv{font-size:10.7px;color:#4b5058;margin-top:5px}
+.doc-kv b{color:#15171b;font-weight:600}
+
+table.doc-items{width:100%;border-collapse:collapse;margin-top:17px}
+table.doc-items th{
+  font-size:9.4px;font-weight:700;letter-spacing:.11em;text-transform:uppercase;color:#6b7280;
+  text-align:left;padding:0 0 6px;border-bottom:1.5px solid #15171b;
+}
+table.doc-items th.r,table.doc-items td.r{text-align:right}
+table.doc-items th.c,table.doc-items td.c{text-align:center}
+table.doc-items td{padding:6.5px 0;border-bottom:1px solid #f0ece5;vertical-align:top;font-size:11.2px}
+table.doc-items td.idx{color:#a3aab3;font-size:10px;width:22px;padding-right:6px}
+table.doc-items td.desc{padding-right:16px}
+table.doc-items td.desc .d-note{display:block;color:#6b7280;font-size:10.3px;margin-top:2px}
+table.doc-items .qty{width:52px}
+table.doc-items .rate{width:96px}
+table.doc-items .amt{width:104px;font-weight:600}
+table.doc-items td.num{font-variant-numeric:tabular-nums}
+
+.doc-mid{display:grid;grid-template-columns:1fr 292px;gap:30px;margin-top:13px;align-items:start}
+.doc-scope{font-size:10.5px;color:#6b7280;line-height:1.62;white-space:pre-line;padding-top:2px}
+.doc-scope h4{font-size:9.4px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:#9099a3;margin-bottom:6px}
+table.doc-tot{width:100%;border-collapse:collapse;font-size:11.2px}
+table.doc-tot td{padding:4px 0}
+table.doc-tot td:last-child{text-align:right;font-variant-numeric:tabular-nums;font-weight:600;white-space:nowrap}
+table.doc-tot td:first-child{color:#4b5058}
+table.doc-tot tr.sep td{border-top:1px solid #eae5dc;padding-top:9px}
+table.doc-tot tr.grand td{
+  border-top:1.5px solid #15171b;padding-top:9px;font-size:11.6px;font-weight:700;color:#15171b;
+}
+table.doc-tot tr.grand td:first-child{
+  color:#15171b;font-size:9.6px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;
+}
+table.doc-tot tr.less td{color:#4b5058}
+table.doc-tot tr.less td:last-child{color:#15171b}
+
+.doc-due{
+  margin-top:14px;border:1.5px solid var(--accent);border-radius:9px;overflow:hidden;
+  display:flex;align-items:stretch;
+}
+.doc-due-main{background:var(--accent-soft);padding:12px 18px;flex:1;display:flex;align-items:center;justify-content:space-between;gap:20px}
+.doc-due-lbl{font-size:9.8px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#a53f07}
+.doc-due-sub{font-size:10.2px;color:#8a5a33;margin-top:3px}
+.doc-due-amt{font-size:21px;font-weight:800;letter-spacing:-.6px;font-variant-numeric:tabular-nums;color:#15171b;white-space:nowrap}
+.doc-words{font-size:10.2px;color:#6b7280;font-style:italic;margin-top:7px;padding-left:2px}
+.doc-then{
+  margin-top:8px;font-size:10.6px;color:#4b5058;
+  background:#faf8f5;border-left:2.5px solid #dcd6cb;padding:7px 12px;border-radius:0 6px 6px 0;
+}
+.doc-then b{font-weight:650;color:#15171b;font-variant-numeric:tabular-nums}
+
+.doc-foot{display:grid;grid-template-columns:1fr 1fr;gap:30px;margin-top:18px;padding-top:14px;border-top:1px solid #eae5dc}
+.doc-foot h4{font-size:9.4px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:#9099a3;margin-bottom:7px}
+.doc-foot .body{font-size:10.5px;color:#4b5058;line-height:1.66;white-space:pre-line}
+.doc-sign{display:flex;justify-content:space-between;align-items:flex-end;margin-top:22px;gap:30px}
+.doc-sign-box{width:200px}
+.doc-sign-line{border-top:1px solid #b8bfc7;padding-top:5px;font-size:10.2px;color:#6b7280}
+.doc-sign-name{font-size:10.8px;font-weight:650;color:#15171b}
+.doc-thanks{font-size:10.6px;color:#6b7280;text-align:right;max-width:280px}
+.doc-thanks strong{color:#15171b;font-weight:650}
+
+/* ============================================================ responsive */
+@media (max-width:1080px){
+  .editor{grid-template-columns:1fr}
+  .pane-form{border-right:0;border-bottom:1px solid var(--line);padding-bottom:26px}
+  .pane-inner{position:static}
+  .view-scroll{max-height:none}
+  .actions{position:static;width:100%;padding:18px 0 0;background:none}
+  .form-wrap{max-width:none}
+}
+@media (max-width:620px){
+  .pane-form,.pane-view{padding:18px 16px}
+  .grid2,.grid3{grid-template-columns:1fr}
+  .field.span2{grid-column:auto}
+  .doc{padding:26px 22px;font-size:10.6px}
+  .doc-head{flex-direction:column;gap:18px}
+  .doc-brand{max-width:100%}
+  .doc-title{text-align:left}
+  table.doc-meta{margin-left:0}
+  .doc-parties,.doc-mid,.doc-foot{grid-template-columns:1fr;gap:18px}
+  .doc-sign{flex-direction:column;align-items:flex-start}
+  .doc-thanks{text-align:left}
+  .item-row,.item-head{grid-template-columns:1fr 56px 88px 28px}
+}
+
+/* ============================================================
+   PRINT — only #printRoot survives. Nothing from the app UI.
+   ============================================================ */
+#printRoot{display:none}
+@page{size:A4;margin:0}
+@media print{
+  html,body{background:#fff!important;margin:0!important;padding:0!important}
+  #app,#toast{display:none!important}
+  #printRoot{display:block!important}
+  #printRoot .doc{
+    box-shadow:none!important;max-width:none!important;width:auto!important;
+    margin:0!important;padding:13mm 13mm 11mm!important;font-size:10.3px;
+  }
+  #printRoot .doc .rule-top{height:4mm}
+  .doc-due,.doc-due-main,table.doc-items,table.doc-tot,.doc-foot,.doc-sign{
+    -webkit-print-color-adjust:exact;print-color-adjust:exact;
+  }
+  .doc-due,.doc-sign,.doc-foot,.doc-mid{break-inside:avoid}
+  table.doc-items tr{break-inside:avoid}
+  /* if a long invoice does run to a second page, repeat the column headers */
+  table.doc-items thead{display:table-header-group}
+}
+</style>
+</head>
+<body>
+
+<div id="app">
+
+  <header class="topbar">
+    <button class="logo" data-go="home" title="Home">
+      <span class="logo-mark"></span>
+      <span class="logo-text">VBUILD <span>Invoices</span></span>
+    </button>
+    <span class="topbar-spacer"></span>
+    <button class="btn btn-sm btn-ghost" data-go="settings">Company details</button>
+  </header>
+
+  <!-- ===================================================== HOME -->
+  <main id="screen-home" class="screen is-active">
+    <div class="home">
+      <p class="hello" id="greeting">Good day</p>
+      <h1>What are we billing today?</h1>
+      <p class="lede">Two paths. Ask for the advance up front, or close the project out and collect what's left.</p>
+
+      <div class="choices">
+        <button class="choice" data-new="proforma">
+          <span class="choice-ic"><svg viewBox="0 0 24 24"><path d="M12 3v18M3 8h18M6 13h5M6 17h3"/></svg></span>
+          <h3>Proforma invoice</h3>
+          <p>Quote the full project value and request your advance. Shows the client exactly what to pay now and what's left for later.</p>
+          <span class="arrow">Start a proforma <svg class="ar" viewBox="0 0 16 16"><path d="M2.5 8h11M9.5 4l4 4-4 4"/></svg></span>
+        </button>
+        <button class="choice" data-new="final">
+          <span class="choice-ic"><svg viewBox="0 0 24 24"><path d="M4 6h16v13a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6zM8 3v4M16 3v4M9 13l2.2 2.2L16 11"/></svg></span>
+          <h3>Final invoice</h3>
+          <p>Project delivered. We'll ask whether you already took an advance and work out the balance from there.</p>
+          <span class="arrow">Start a final invoice <svg class="ar" viewBox="0 0 16 16"><path d="M2.5 8h11M9.5 4l4 4-4 4"/></svg></span>
+        </button>
+      </div>
+
+      <section class="recent">
+        <div class="recent-head">
+          <h2>Recent</h2><span class="count" id="recentCount"></span>
+        </div>
+        <div class="rlist" id="recentList"></div>
+      </section>
+    </div>
+  </main>
+
+  <!-- ===================================================== EDITOR -->
+  <main id="screen-editor" class="screen">
+    <div class="editor">
+
+      <section class="pane-form">
+        <div class="form-wrap">
+          <div class="eyebrow">
+            <h1 id="edTitle">Proforma invoice</h1>
+            <span class="tag" id="edTag">Advance request</span>
+          </div>
+          <p class="eyebrow-sub" id="edSub">Fill this in and watch the invoice build itself on the right.</p>
+
+          <!-- 1 · basics -->
+          <div class="block">
+            <div class="block-h"><span class="step">1</span><h2>The basics</h2></div>
+            <div class="grid3">
+              <div class="field">
+                <label for="fNumber">Invoice no.</label>
+                <input class="ctl" id="fNumber" autocomplete="off">
+              </div>
+              <div class="field">
+                <label for="fIssue">Date issued</label>
+                <input class="ctl" id="fIssue" type="date">
+              </div>
+              <div class="field">
+                <label for="fDue" id="lblDue">Valid until</label>
+                <input class="ctl" id="fDue" type="date">
+              </div>
+            </div>
+          </div>
+
+          <!-- 2 · client -->
+          <div class="block">
+            <div class="block-h"><span class="step">2</span><h2>Who's it for</h2></div>
+            <div class="grid2">
+              <div class="field">
+                <label for="fcName">Client name</label>
+                <input class="ctl" id="fcName" placeholder="Nadeesha Perera">
+              </div>
+              <div class="field">
+                <label for="fcCompany">Company</label>
+                <input class="ctl" id="fcCompany" placeholder="Lanka Trade (Pvt) Ltd">
+              </div>
+              <div class="field">
+                <label for="fcEmail">Email</label>
+                <input class="ctl" id="fcEmail" placeholder="hello@lankatrade.lk">
+              </div>
+              <div class="field">
+                <label for="fcPhone">Phone</label>
+                <input class="ctl" id="fcPhone" placeholder="+94 77 000 0000">
+              </div>
+              <div class="field span2">
+                <label for="fcAddr">Address <span class="help">optional</span></label>
+                <textarea class="ctl" id="fcAddr" rows="2" placeholder="No. 24, Galle Road&#10;Colombo 03"></textarea>
+              </div>
+            </div>
+          </div>
+
+          <!-- 3 · project -->
+          <div class="block">
+            <div class="block-h"><span class="step">3</span><h2>The project</h2></div>
+            <div class="grid2">
+              <div class="field">
+                <label for="fpTitle">Project title</label>
+                <input class="ctl" id="fpTitle" placeholder="E-commerce platform &amp; brand site">
+              </div>
+              <div class="field">
+                <label for="fpTimeline">Timeline <span class="help">optional</span></label>
+                <input class="ctl" id="fpTimeline" placeholder="8 weeks from advance">
+              </div>
+              <div class="field span2">
+                <label for="fpScope">Scope note <span class="help">optional — appears under the line items</span></label>
+                <textarea class="ctl" id="fpScope" rows="2" placeholder="Includes two rounds of revisions per milestone and 30 days of post-launch support."></textarea>
+              </div>
+            </div>
+          </div>
+
+          <!-- 4 · items -->
+          <div class="block">
+            <div class="block-h"><span class="step">4</span><h2>What's included</h2><span class="hint" id="itemsHint"></span></div>
+            <div class="item-head">
+              <span>Description</span><span>Qty</span><span>Rate</span><span></span>
+            </div>
+            <div class="items-ed" id="itemsEd"></div>
+            <div class="items-foot">
+              <button class="btn btn-sm" id="addItem">+ Add line</button>
+              <span class="mini-total num" id="miniSub"></span>
+            </div>
+          </div>
+
+          <!-- 5 · adjustments -->
+          <div class="block">
+            <div class="block-h"><span class="step">5</span><h2>Discount &amp; tax</h2><span class="hint">leave at zero to hide</span></div>
+            <div class="grid3">
+              <div class="field">
+                <label for="fDiscVal">Discount</label>
+                <input class="ctl num" id="fDiscVal" type="number" min="0" step="0.01" value="0">
+              </div>
+              <div class="field">
+                <label for="fDiscMode">Discount type</label>
+                <select class="ctl" id="fDiscMode">
+                  <option value="pct">Percentage (%)</option>
+                  <option value="amt">Fixed amount</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="fTaxRate">Tax rate (%)</label>
+                <input class="ctl num" id="fTaxRate" type="number" min="0" step="0.01" value="0">
+              </div>
+              <div class="field span2">
+                <label for="fTaxLabel">Tax label</label>
+                <input class="ctl" id="fTaxLabel" placeholder="VAT">
+              </div>
+              <div class="field">
+                <label for="fCurrency">Currency</label>
+                <select class="ctl" id="fCurrency"></select>
+              </div>
+            </div>
+          </div>
+
+          <!-- 6a · PROFORMA advance -->
+          <div class="block" id="blockProforma">
+            <div class="block-h"><span class="step">6</span><h2>Your advance</h2></div>
+            <div class="ask">
+              <p class="ask-q">How much are you asking for up front?</p>
+              <p class="ask-sub">The invoice will show the full project value, the advance due now, and the balance for later.</p>
+              <div class="grid2">
+                <div class="field">
+                  <label for="fAdvMode">Work it out as</label>
+                  <select class="ctl" id="fAdvMode">
+                    <option value="pct">Percentage of total</option>
+                    <option value="amt">Fixed amount</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label for="fAdvVal" id="lblAdvVal">Advance (%)</label>
+                  <input class="ctl num" id="fAdvVal" type="number" min="0" step="0.01" value="50">
+                </div>
+              </div>
+              <div class="chips" id="advChips">
+                <button class="chip" data-pct="25">25%</button>
+                <button class="chip" data-pct="30">30%</button>
+                <button class="chip" data-pct="40">40%</button>
+                <button class="chip" data-pct="50">50%</button>
+                <button class="chip" data-pct="60">60%</button>
+                <button class="chip" data-pct="100">100%</button>
+              </div>
+              <div class="field" style="margin-top:14px">
+                <label for="fBalanceWhen">Balance falls due</label>
+                <input class="ctl" id="fBalanceWhen" placeholder="on delivery / handover">
+              </div>
+            </div>
+          </div>
+
+          <!-- 6b · FINAL advance question -->
+          <div class="block" id="blockFinal">
+            <div class="block-h"><span class="step">6</span><h2>Settling up</h2></div>
+            <div class="ask">
+              <p class="ask-q">Did you take an advance on this project?</p>
+              <p class="ask-sub">This decides whether the invoice bills the balance or the whole amount.</p>
+              <div class="yn">
+                <button id="ynYes" data-adv="yes">Yes, I did<small>Deduct it and bill the balance</small></button>
+                <button id="ynNo" data-adv="no">No, nothing yet<small>Bill the full project value</small></button>
+              </div>
+
+              <div class="reveal" id="advReveal" hidden>
+                <div class="grid2">
+                  <div class="field">
+                    <label for="fAdvMode2">Enter the advance as</label>
+                    <select class="ctl" id="fAdvMode2">
+                      <option value="amt">Amount received</option>
+                      <option value="pct">Percentage of total</option>
+                    </select>
+                  </div>
+                  <div class="field">
+                    <label for="fAdvRecv" id="lblAdvRecv">Amount received</label>
+                    <input class="ctl num" id="fAdvRecv" type="number" min="0" step="0.01" value="0">
+                  </div>
+                  <div class="field">
+                    <label for="fAdvDate">Received on <span class="help">optional</span></label>
+                    <input class="ctl" id="fAdvDate" type="date">
+                  </div>
+                  <div class="field">
+                    <label for="fAdvRef">Against proforma <span class="help">optional</span></label>
+                    <input class="ctl" id="fAdvRef" placeholder="VB-PF-2026-001">
+                  </div>
+                </div>
+                <div class="field" style="margin-top:12px" id="pfPullWrap" hidden>
+                  <label for="fPullPf">Or pull it straight from a saved proforma</label>
+                  <select class="ctl" id="fPullPf"></select>
+                  <span class="help">Copies the client, line items and advance across.</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 7 · closing -->
+          <div class="block">
+            <div class="block-h"><span class="step">7</span><h2>Payment &amp; closing note</h2></div>
+            <div class="grid2">
+              <div class="field span2">
+                <label for="fBank">Where to pay</label>
+                <textarea class="ctl" id="fBank" rows="4"></textarea>
+              </div>
+              <div class="field span2">
+                <label for="fNotes">Terms &amp; notes</label>
+                <textarea class="ctl" id="fNotes" rows="3"></textarea>
+              </div>
+              <div class="field">
+                <label for="fSignName">Signed by</label>
+                <input class="ctl" id="fSignName" placeholder="Name">
+              </div>
+              <div class="field">
+                <label for="fSignRole">Role</label>
+                <input class="ctl" id="fSignRole" placeholder="Founder, VBUILD">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button class="btn btn-ghost" data-go="home"><svg class="ar back" viewBox="0 0 16 16"><path d="M2.5 8h11M9.5 4l4 4-4 4"/></svg> Back</button>
+          <span class="grow"></span>
+          <button class="btn" id="btnSave">Save</button>
+          <button class="btn btn-accent" id="btnPrint">Download PDF</button>
+        </div>
+      </section>
+
+      <section class="pane-view">
+        <div class="pane-inner">
+          <div class="view-bar">
+            <span class="lbl">What your client receives</span>
+            <span class="topbar-spacer" style="flex:1"></span>
+            <button class="btn btn-sm" id="btnPrint2">Print / PDF</button>
+          </div>
+          <div class="view-scroll">
+            <div class="doc" id="doc"></div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- ===================================================== SETTINGS -->
+  <main id="screen-settings" class="screen">
+    <div class="settings">
+      <h1>Your company details</h1>
+      <p class="lede">Set this up once. Every invoice you make from here on picks it up automatically.</p>
+
+      <div class="block">
+        <div class="block-h"><h2>Identity</h2></div>
+        <div class="logo-drop" style="margin-bottom:16px">
+          <div class="logo-prev" id="logoPrev"><span>No logo</span></div>
+          <div>
+            <input type="file" id="logoInput" accept="image/*" hidden>
+            <button class="btn btn-sm" id="logoPick">Upload logo</button>
+            <button class="btn btn-sm btn-ghost" id="logoClear">Remove</button>
+            <p class="help" style="margin-top:6px">PNG or SVG with a transparent background works best.<br>Without one, the invoice uses a clean VBUILD wordmark.</p>
+          </div>
+        </div>
+        <div class="grid2">
+          <div class="field">
+            <label for="sName">Company name</label>
+            <input class="ctl" id="sName">
+          </div>
+          <div class="field">
+            <label for="sTagline">Tagline</label>
+            <input class="ctl" id="sTagline">
+          </div>
+          <div class="field span2">
+            <label for="sAddress">Address &amp; registration</label>
+            <textarea class="ctl" id="sAddress" rows="3"></textarea>
+          </div>
+          <div class="field">
+            <label for="sEmail">Email</label>
+            <input class="ctl" id="sEmail">
+          </div>
+          <div class="field">
+            <label for="sPhone">Phone</label>
+            <input class="ctl" id="sPhone">
+          </div>
+          <div class="field span2">
+            <label for="sWebsite">Website</label>
+            <input class="ctl" id="sWebsite">
+          </div>
+          <div class="field span2">
+            <label>Accent colour</label>
+            <div class="swatches" id="swatches"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block">
+        <div class="block-h"><h2>Defaults</h2></div>
+        <div class="grid3">
+          <div class="field">
+            <label for="sCurrency">Currency</label>
+            <select class="ctl" id="sCurrency"></select>
+          </div>
+          <div class="field">
+            <label for="sTaxRate">Tax rate (%)</label>
+            <input class="ctl num" id="sTaxRate" type="number" min="0" step="0.01">
+          </div>
+          <div class="field">
+            <label for="sTaxLabel">Tax label</label>
+            <input class="ctl" id="sTaxLabel">
+          </div>
+          <div class="field">
+            <label for="sAdvPct">Advance (%)</label>
+            <input class="ctl num" id="sAdvPct" type="number" min="0" max="100" step="1">
+          </div>
+          <div class="field">
+            <label for="sValidDays">Proforma valid for (days)</label>
+            <input class="ctl num" id="sValidDays" type="number" min="1" step="1">
+          </div>
+          <div class="field">
+            <label for="sPayDays">Final invoice due in (days)</label>
+            <input class="ctl num" id="sPayDays" type="number" min="0" step="1">
+          </div>
+          <div class="field">
+            <label for="sPrefixPf">Proforma prefix</label>
+            <input class="ctl" id="sPrefixPf">
+          </div>
+          <div class="field">
+            <label for="sPrefixFi">Final prefix</label>
+            <input class="ctl" id="sPrefixFi">
+          </div>
+          <div class="field">
+            <label for="sWords">Amount in words</label>
+            <select class="ctl" id="sWords">
+              <option value="1">Show on invoice</option>
+              <option value="0">Hide</option>
+            </select>
+          </div>
+          <div class="field span2">
+            <label for="sBank">Where to pay</label>
+            <textarea class="ctl" id="sBank" rows="4"></textarea>
+          </div>
+          <div class="field span2">
+            <label for="sTermsPf">Default terms — proforma</label>
+            <textarea class="ctl" id="sTermsPf" rows="3"></textarea>
+          </div>
+          <div class="field span2">
+            <label for="sTermsFi">Default terms — final invoice</label>
+            <textarea class="ctl" id="sTermsFi" rows="3"></textarea>
+          </div>
+          <div class="field">
+            <label for="sSignName">Signed by</label>
+            <input class="ctl" id="sSignName">
+          </div>
+          <div class="field">
+            <label for="sSignRole">Role</label>
+            <input class="ctl" id="sSignRole">
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:10px;margin-top:8px">
+        <button class="btn btn-ghost" data-go="home"><svg class="ar back" viewBox="0 0 16 16"><path d="M2.5 8h11M9.5 4l4 4-4 4"/></svg> Back</button>
+        <span style="flex:1"></span>
+        <button class="btn btn-primary" id="btnSaveProfile">Save details</button>
+      </div>
+    </div>
+  </main>
+
+</div>
+
+<!-- Print target. Populated with a clone of the document only. -->
+<div id="printRoot"></div>
+<div id="toast"></div>
+
+<script>
+"use strict";
+/* =====================================================================
+   VBUILD Invoices
+   A single-file invoice tool. No build step, no network calls — client
+   data never leaves the browser it was typed into.
+   ===================================================================== */
+
+const $  = (s, r=document) => r.querySelector(s);
+const $$ = (s, r=document) => [...r.querySelectorAll(s)];
+
+const KEY = { profile:'vbuild.profile.v2', docs:'vbuild.docs.v2', seq:'vbuild.seq.v2' };
+
+const CURRENCIES = {
+  LKR:{sym:'Rs.',  unit:'Rupees',  sub:'Cents', name:'Sri Lankan Rupee'},
+  USD:{sym:'$',    unit:'Dollars', sub:'Cents', name:'US Dollar'},
+  EUR:{sym:'\u20AC', unit:'Euro',  sub:'Cents', name:'Euro'},
+  GBP:{sym:'\u00A3', unit:'Pounds',sub:'Pence', name:'Pound Sterling'},
+  AUD:{sym:'A$',   unit:'Dollars', sub:'Cents', name:'Australian Dollar'},
+  CAD:{sym:'C$',   unit:'Dollars', sub:'Cents', name:'Canadian Dollar'},
+  AED:{sym:'AED',  unit:'Dirhams', sub:'Fils',  name:'UAE Dirham'},
+  SGD:{sym:'S$',   unit:'Dollars', sub:'Cents', name:'Singapore Dollar'},
+  INR:{sym:'\u20B9', unit:'Rupees',sub:'Paise', name:'Indian Rupee'}
+};
+const ACCENTS = ['#e2560a','#c2410c','#b45309','#15803d','#0f766e','#1d4ed8','#4338ca','#9d174d','#1f2937'];
+const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+/* ------------------------------------------------------------ storage */
+const load = (k, fb) => { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : fb; } catch(e){ return fb; } };
+const save = (k, v)  => { try { localStorage.setItem(k, JSON.stringify(v)); } catch(e){} };
+
+const DEFAULT_PROFILE = {
+  name:'VBUILD',
+  tagline:'Software & Web Development',
+  address:'Colombo, Sri Lanka',
+  email:'hello@vbuild.lk',
+  phone:'',
+  website:'vbuild.lk',
+  logo:'',
+  accent:'#e2560a',
+  currency:'LKR',
+  taxRate:0,
+  taxLabel:'VAT',
+  advPct:50,
+  validDays:14,
+  payDays:7,
+  prefixPf:'VB-PF',
+  prefixFi:'VB-INV',
+  showWords:1,
+  bank:'Bank\u2003\u2003\u2003 : \nAccount name : VBUILD\nAccount no.\u2003 : \nBranch\u2003\u2003 : \nSWIFT\u2003\u2003 : ',
+  termsPf:'This proforma is a request for the advance shown above and is not a tax invoice.\nWork begins once the advance is received and confirmed.',
+  termsFi:'Please settle the amount due by the date shown above.\nKindly quote the invoice number on your transfer.',
+  signName:'',
+  signRole:'Founder, VBUILD'
+};
+
+let profile = Object.assign({}, DEFAULT_PROFILE, load(KEY.profile, {}));
+let docs    = load(KEY.docs, []);
+let seq     = load(KEY.seq, {});
+let state   = null;
+let editingId = null;
+
+/* ------------------------------------------------------------ helpers */
+function esc(s){
+  return String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+function money(n, cur){
+  const c = CURRENCIES[cur || 'LKR'] || CURRENCIES.LKR;
+  const v = Math.abs(Number(n) || 0);
+  const s = v.toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2});
+  return (Number(n) < -0.004 ? '-' : '') + c.sym + ' ' + s;
+}
+function qtyText(q){
+  const n = Number(q) || 0;
+  return Number.isInteger(n) ? String(n) : n.toLocaleString('en-US',{maximumFractionDigits:2});
+}
+function todayISO(){
+  const d = new Date();
+  return [d.getFullYear(), String(d.getMonth()+1).padStart(2,'0'), String(d.getDate()).padStart(2,'0')].join('-');
+}
+function addDaysISO(iso, days){
+  const p = String(iso||'').split('-').map(Number);
+  const d = (p.length === 3 && p[0]) ? new Date(p[0], p[1]-1, p[2]) : new Date();
+  d.setDate(d.getDate() + Number(days||0));
+  return [d.getFullYear(), String(d.getMonth()+1).padStart(2,'0'), String(d.getDate()).padStart(2,'0')].join('-');
+}
+function prettyDate(iso){
+  const p = String(iso||'').split('-');
+  if(p.length !== 3 || !p[0]) return '';
+  const d = Number(p[2]), m = Number(p[1]) - 1, y = p[0];
+  if(isNaN(d) || m < 0 || m > 11) return '';
+  return d + ' ' + MONTHS[m] + ' ' + y;
+}
+
+/* number → words, for the amount due line */
+const ONES = ['','One','Two','Three','Four','Five','Six','Seven','Eight','Nine','Ten','Eleven','Twelve','Thirteen',
+  'Fourteen','Fifteen','Sixteen','Seventeen','Eighteen','Nineteen'];
+const TENS = ['','','Twenty','Thirty','Forty','Fifty','Sixty','Seventy','Eighty','Ninety'];
+function under1000(n){
+  let out = '';
+  if(n >= 100){ out += ONES[Math.floor(n/100)] + ' Hundred'; n %= 100; if(n) out += ' '; }
+  if(n >= 20){ out += TENS[Math.floor(n/10)]; n %= 10; if(n) out += '-' + ONES[n]; }
+  else if(n > 0){ out += ONES[n]; }
+  return out;
+}
+function intWords(n){
+  n = Math.floor(Math.abs(n));
+  if(n === 0) return 'Zero';
+  const scales = [[1e9,'Billion'],[1e6,'Million'],[1e3,'Thousand']];
+  let out = [];
+  for(const [v,label] of scales){
+    if(n >= v){ out.push(under1000(Math.floor(n/v)) + ' ' + label); n %= v; }
+  }
+  if(n > 0) out.push(under1000(n));
+  return out.join(' ');
+}
+function amountWords(amount, cur){
+  const c = CURRENCIES[cur || 'LKR'] || CURRENCIES.LKR;
+  const total = Math.round((Number(amount)||0) * 100);
+  const whole = Math.floor(total / 100), cents = total % 100;
+  let s = intWords(whole) + ' ' + c.unit;
+  if(cents > 0) s += ' and ' + intWords(cents) + ' ' + c.sub;
+  return s + ' only';
+}
+
+function toast(msg){
+  const t = $('#toast');
+  t.textContent = msg;
+  t.classList.add('on');
+  clearTimeout(toast._t);
+  toast._t = setTimeout(() => t.classList.remove('on'), 2200);
+}
+function setAccent(hex){
+  document.documentElement.style.setProperty('--accent', hex);
+  document.documentElement.style.setProperty('--accent-soft', tint(hex, 0.09));
+}
+function tint(hex, a){
+  const h = hex.replace('#','');
+  const r = parseInt(h.slice(0,2),16), g = parseInt(h.slice(2,4),16), b = parseInt(h.slice(4,6),16);
+  const mix = c => Math.round(c * a + 255 * (1 - a));
+  return 'rgb(' + mix(r) + ',' + mix(g) + ',' + mix(b) + ')';
+}
+
+/* ------------------------------------------------------------ numbering */
+function nextNumber(type){
+  const prefix = type === 'proforma' ? profile.prefixPf : profile.prefixFi;
+  const year = new Date().getFullYear();
+  const k = type + ':' + year;
+  const n = (seq[k] || 0) + 1;
+  return prefix + '-' + year + '-' + String(n).padStart(3, '0');
+}
+function commitNumber(type, number){
+  const year = new Date().getFullYear();
+  const k = type + ':' + year;
+  const m = String(number || '').match(/(\d+)\s*$/);
+  const n = m ? Number(m[1]) : 0;
+  if(n > (seq[k] || 0)){ seq[k] = n; save(KEY.seq, seq); }
+}
+
+/* ------------------------------------------------------------ model */
+function blankDoc(type){
+  return {
+    id: 'd' + Date.now().toString(36) + Math.random().toString(36).slice(2,6),
+    type,
+    number: nextNumber(type),
+    issue: todayISO(),
+    due: addDaysISO(todayISO(), type === 'proforma' ? profile.validDays : profile.payDays),
+    client:{name:'', company:'', email:'', phone:'', addr:''},
+    project:{title:'', timeline:'', scope:''},
+    items:[{desc:'', note:'', qty:1, rate:0}],
+    currency: profile.currency,
+    discMode:'pct', discVal:0,
+    taxRate: Number(profile.taxRate) || 0,
+    taxLabel: profile.taxLabel,
+    advMode:'pct',
+    advVal: Number(profile.advPct) || 50,
+    balanceWhen:'on delivery',
+    hasAdvance: null,
+    advRecvMode:'amt',
+    advRecv:0,
+    advDate:'',
+    advRef:'',
+    bank: profile.bank,
+    notes: type === 'proforma' ? profile.termsPf : profile.termsFi,
+    signName: profile.signName,
+    signRole: profile.signRole,
+    savedAt: null
+  };
+}
+
+function compute(d){
+  const sub = d.items.reduce((t,i) => t + (Number(i.qty)||0) * (Number(i.rate)||0), 0);
+  const disc = d.discMode === 'pct' ? sub * (Number(d.discVal)||0) / 100 : Math.min(Number(d.discVal)||0, sub);
+  const net = Math.max(sub - disc, 0);
+  const tax = net * (Number(d.taxRate)||0) / 100;
+  const total = net + tax;
+
+  let advance = 0;
+  if(d.type === 'proforma'){
+    advance = d.advMode === 'pct' ? total * (Number(d.advVal)||0) / 100 : Number(d.advVal)||0;
+  } else if(d.hasAdvance === true){
+    advance = d.advRecvMode === 'pct' ? total * (Number(d.advRecv)||0) / 100 : Number(d.advRecv)||0;
+  }
+  advance = Math.min(Math.max(advance, 0), total);
+
+  const balance = total - advance;
+  const dueNow = d.type === 'proforma' ? advance : balance;
+  const advPctOfTotal = total > 0 ? (advance / total) * 100 : 0;
+
+  return {sub, disc, net, tax, total, advance, balance, dueNow, advPctOfTotal};
+}
+
+/* =====================================================================
+   THE DOCUMENT
+   Everything below renders only VBUILD's brand and the client's data.
+   ===================================================================== */
+function renderDoc(d){
+  const c = compute(d);
+  const cur = d.currency;
+  const isPf = d.type === 'proforma';
+
+  /* brand block */
+  const brandMark = profile.logo
+    ? '<img class="doc-logo" src="' + esc(profile.logo) + '" alt="' + esc(profile.name) + '">'
+    : '<div class="doc-word">' + esc(profile.name || 'VBUILD').replace(/^(.)/, '<em>$1</em>') + '</div>';
+  const orgLines = [profile.address, [profile.email, profile.phone].filter(Boolean).join('\u2003·\u2003'), profile.website]
+    .filter(Boolean).join('\n');
+
+  /* meta */
+  const meta = [
+    ['Invoice no.', d.number],
+    ['Date issued', prettyDate(d.issue)],
+    [isPf ? 'Valid until' : 'Payment due', prettyDate(d.due)]
+  ].filter(r => r[1]);
+  if(!isPf && d.hasAdvance === true && d.advRef) meta.push(['Proforma ref.', d.advRef]);
+
+  /* parties */
+  const clientLines = [d.client.company && d.client.name ? d.client.company : '', d.client.addr,
+    [d.client.email, d.client.phone].filter(Boolean).join('\u2003·\u2003')].filter(Boolean).join('\n');
+  const headline = d.client.name || d.client.company || 'Client name';
+
+  /* items */
+  const rows = d.items.filter(i => (i.desc||'').trim() || Number(i.rate) || Number(i.qty) > 1).map((i, n) =>
+    '<tr>' +
+      '<td class="idx num">' + (n+1) + '</td>' +
+      '<td class="desc">' + esc(i.desc || '—') + (i.note ? '<span class="d-note">' + esc(i.note) + '</span>' : '') + '</td>' +
+      '<td class="c num qty">' + qtyText(i.qty) + '</td>' +
+      '<td class="r num rate">' + money(i.rate, cur) + '</td>' +
+      '<td class="r num amt">' + money((Number(i.qty)||0) * (Number(i.rate)||0), cur) + '</td>' +
+    '</tr>'
+  ).join('');
+
+  /* totals */
+  let tot = '<tr><td>Subtotal</td><td class="num">' + money(c.sub, cur) + '</td></tr>';
+  if(c.disc > 0.004){
+    tot += '<tr class="less"><td>Discount' + (d.discMode === 'pct' ? ' (' + (+d.discVal) + '%)' : '') +
+           '</td><td class="num">− ' + money(c.disc, cur) + '</td></tr>';
+  }
+  if(c.tax > 0.004){
+    tot += '<tr><td>' + esc(d.taxLabel || 'Tax') + ' (' + (+d.taxRate) + '%)</td><td class="num">' + money(c.tax, cur) + '</td></tr>';
+  }
+  tot += '<tr class="grand"><td>Total project value</td><td class="num">' + money(c.total, cur) + '</td></tr>';
+
+  if(!isPf && d.hasAdvance === true){
+    tot += '<tr class="less sep"><td>Advance received' + (d.advDate ? ' · ' + esc(prettyDate(d.advDate)) : '') +
+           '</td><td class="num">− ' + money(c.advance, cur) + '</td></tr>';
+  }
+
+  /* the due callout */
+  let dueLabel, dueSub = '';
+  if(isPf){
+    dueLabel = 'Advance payable now';
+    dueSub = (c.advPctOfTotal > 0 ? Math.round(c.advPctOfTotal * 10) / 10 + '% of the total project value' : 'To commence work');
+  } else if(d.hasAdvance === true){
+    dueLabel = 'Balance now due';
+    dueSub = 'Total project value less the advance already received';
+  } else {
+    dueLabel = 'Amount due';
+    dueSub = 'Full project value, payable in one settlement';
+  }
+
+  const thenLine = (isPf && c.balance > 0.004)
+    ? '<div class="doc-then">Remaining balance of <b>' + money(c.balance, cur) + '</b> becomes due ' +
+      esc(d.balanceWhen || 'on delivery') + '.</div>'
+    : '';
+
+  const words = Number(profile.showWords)
+    ? '<div class="doc-words">Amount in words: ' + esc(amountWords(c.dueNow, cur)) + '</div>'
+    : '';
+
+  const closing = isPf
+    ? '<strong>Thank you for choosing ' + esc(profile.name || 'VBUILD') + '.</strong><br>Approve this proforma and settle the advance, and we\u2019ll get straight to work.'
+    : '<strong>Thank you for your business.</strong><br>It\u2019s been a pleasure building this with you.';
+
+  const signName = d.signName || profile.signName;
+
+  return '' +
+  '<div class="rule-top"></div>' +
+  '<header class="doc-head">' +
+    '<div class="doc-brand">' +
+      brandMark +
+      (profile.tagline ? '<div class="doc-tag">' + esc(profile.tagline) + '</div>' : '') +
+      (orgLines ? '<div class="doc-org">' + esc(orgLines) + '</div>' : '') +
+    '</div>' +
+    '<div class="doc-title">' +
+      '<div class="doc-kicker">' + (isPf ? 'Proforma<br>Invoice' : 'Invoice') + '</div>' +
+      '<table class="doc-meta"><tbody>' +
+        meta.map(r => '<tr><td>' + esc(r[0]) + '</td><td>' + esc(r[1]) + '</td></tr>').join('') +
+      '</tbody></table>' +
+    '</div>' +
+  '</header>' +
+
+  '<section class="doc-parties">' +
+    '<div>' +
+      '<h4>' + (isPf ? 'Prepared for' : 'Invoice to') + '</h4>' +
+      '<div class="doc-who">' + esc(headline) + '</div>' +
+      (clientLines ? '<div class="doc-lines">' + esc(clientLines) + '</div>' : '') +
+    '</div>' +
+    '<div>' +
+      '<h4>Project</h4>' +
+      '<div class="doc-who">' + esc(d.project.title || 'Project title') + '</div>' +
+      (d.project.timeline ? '<div class="doc-kv">Timeline: <b>' + esc(d.project.timeline) + '</b></div>' : '') +
+      '<div class="doc-kv">Currency: <b>' + esc(d.currency) + '</b> · ' + esc((CURRENCIES[d.currency]||{}).name || '') + '</div>' +
+    '</div>' +
+  '</section>' +
+
+  '<table class="doc-items"><thead><tr>' +
+    '<th></th><th>Description</th><th class="c">Qty</th><th class="r">Rate</th><th class="r">Amount</th>' +
+  '</tr></thead><tbody>' + (rows || '<tr><td class="idx"></td><td class="desc">—</td><td class="c">—</td><td class="r">—</td><td class="r">—</td></tr>') + '</tbody></table>' +
+
+  '<section class="doc-mid">' +
+    '<div class="doc-scope">' +
+      (d.project.scope ? '<h4>Scope note</h4>' + esc(d.project.scope) : '') +
+    '</div>' +
+    '<table class="doc-tot"><tbody>' + tot + '</tbody></table>' +
+  '</section>' +
+
+  '<section class="doc-due">' +
+    '<div class="doc-due-main">' +
+      '<div><div class="doc-due-lbl">' + esc(dueLabel) + '</div>' +
+      (dueSub ? '<div class="doc-due-sub">' + esc(dueSub) + '</div>' : '') + '</div>' +
+      '<div class="doc-due-amt">' + money(c.dueNow, cur) + '</div>' +
+    '</div>' +
+  '</section>' +
+  words + thenLine +
+
+  '<section class="doc-foot">' +
+    '<div><h4>Where to pay</h4><div class="body">' + esc(d.bank || '') + '</div></div>' +
+    '<div><h4>Terms &amp; notes</h4><div class="body">' + esc(d.notes || '') + '</div></div>' +
+  '</section>' +
+
+  '<div class="doc-sign">' +
+    '<div class="doc-sign-box">' +
+      (signName ? '<div class="doc-sign-name">' + esc(signName) + '</div>' : '<div style="height:22px"></div>') +
+      '<div class="doc-sign-line">' + esc(d.signRole || profile.signRole || 'Authorised signatory') + '</div>' +
+    '</div>' +
+    '<div class="doc-thanks">' + closing + '</div>' +
+  '</div>';
+}
+
+/* =====================================================================
+   editor plumbing
+   ===================================================================== */
+function fillCurrencySelects(){
+  const opts = Object.keys(CURRENCIES)
+    .map(k => '<option value="' + k + '">' + k + ' — ' + CURRENCIES[k].name + '</option>').join('');
+  $('#fCurrency').innerHTML = opts;
+  $('#sCurrency').innerHTML = opts;
+}
+
+function renderItemsEd(){
+  const wrap = $('#itemsEd');
+  wrap.innerHTML = state.items.map((it, i) =>
+    '<div class="item-row" data-i="' + i + '">' +
+      '<input class="ctl" data-f="desc" placeholder="' + (i === 0 ? 'Discovery, UX &amp; UI design' : 'Line item') + '" value="' + esc(it.desc) + '">' +
+      '<input class="ctl r num" data-f="qty" type="number" min="0" step="0.01" value="' + (it.qty ?? 1) + '">' +
+      '<input class="ctl r num" data-f="rate" type="number" min="0" step="0.01" value="' + (it.rate ?? 0) + '">' +
+      '<button class="x" data-del="' + i + '" title="Remove line" aria-label="Remove line">&times;</button>' +
+    '</div>'
+  ).join('');
+}
+
+function bindEditor(){
+  /* text + number fields → state */
+  const map = {
+    fNumber:['number'], fIssue:['issue'], fDue:['due'],
+    fcName:['client','name'], fcCompany:['client','company'], fcEmail:['client','email'],
+    fcPhone:['client','phone'], fcAddr:['client','addr'],
+    fpTitle:['project','title'], fpTimeline:['project','timeline'], fpScope:['project','scope'],
+    fDiscVal:['discVal','n'], fDiscMode:['discMode'], fTaxRate:['taxRate','n'], fTaxLabel:['taxLabel'],
+    fCurrency:['currency'], fAdvMode:['advMode'], fAdvVal:['advVal','n'], fBalanceWhen:['balanceWhen'],
+    fAdvMode2:['advRecvMode'], fAdvRecv:['advRecv','n'], fAdvDate:['advDate'], fAdvRef:['advRef'],
+    fBank:['bank'], fNotes:['notes'], fSignName:['signName'], fSignRole:['signRole']
+  };
+  Object.keys(map).forEach(id => {
+    const el = $('#' + id);
+    if(!el) return;
+    el.addEventListener('input', () => {
+      const path = map[id];
+      const isNum = path[path.length-1] === 'n';
+      const keys = isNum ? path.slice(0,-1) : path;
+      const val = isNum ? (parseFloat(el.value) || 0) : el.value;
+      if(keys.length === 1) state[keys[0]] = val;
+      else state[keys[0]][keys[1]] = val;
+      if(id === 'fAdvMode') syncAdvLabels();
+      if(id === 'fAdvMode2') syncAdvLabels();
+      paint();
+    });
+  });
+
+  /* line items */
+  $('#itemsEd').addEventListener('input', e => {
+    const row = e.target.closest('.item-row'); if(!row) return;
+    const i = +row.dataset.i, f = e.target.dataset.f;
+    if(!f) return;
+    state.items[i][f] = (f === 'desc') ? e.target.value : (parseFloat(e.target.value) || 0);
+    paint();
+  });
+  $('#itemsEd').addEventListener('click', e => {
+    const b = e.target.closest('[data-del]'); if(!b) return;
+    const i = +b.dataset.del;
+    state.items.splice(i, 1);
+    if(!state.items.length) state.items.push({desc:'', note:'', qty:1, rate:0});
+    renderItemsEd(); paint();
+  });
+  $('#addItem').addEventListener('click', () => {
+    state.items.push({desc:'', note:'', qty:1, rate:0});
+    renderItemsEd(); paint();
+    const rows = $$('#itemsEd .item-row');
+    const last = rows[rows.length-1];
+    if(last) last.querySelector('[data-f="desc"]').focus();
+  });
+
+  /* advance chips */
+  $('#advChips').addEventListener('click', e => {
+    const b = e.target.closest('[data-pct]'); if(!b) return;
+    state.advMode = 'pct';
+    state.advVal = +b.dataset.pct;
+    $('#fAdvMode').value = 'pct';
+    $('#fAdvVal').value = state.advVal;
+    syncAdvLabels(); paint();
+  });
+
+  /* the yes / no question */
+  $$('[data-adv]').forEach(b => b.addEventListener('click', () => {
+    state.hasAdvance = b.dataset.adv === 'yes';
+    if(state.hasAdvance && !Number(state.advRecv)){
+      /* start them off at the default advance so the number isn't blank */
+      state.advRecvMode = 'pct';
+      state.advRecv = Number(profile.advPct) || 50;
+      $('#fAdvMode2').value = 'pct';
+      $('#fAdvRecv').value = state.advRecv;
+    }
+    syncFinalAsk(); syncAdvLabels(); paint();
+  }));
+
+  /* pull from a saved proforma */
+  $('#fPullPf').addEventListener('change', e => {
+    const src = docs.find(x => x.id === e.target.value);
+    if(!src) return;
+    const t = compute(src);
+    state.client = Object.assign({}, src.client);
+    state.project = Object.assign({}, src.project);
+    state.items = src.items.map(i => Object.assign({}, i));
+    state.currency = src.currency;
+    state.discMode = src.discMode; state.discVal = src.discVal;
+    state.taxRate = src.taxRate;   state.taxLabel = src.taxLabel;
+    state.advRecvMode = 'amt';     state.advRecv = Math.round(t.advance * 100) / 100;
+    state.advRef = src.number;
+    if(!state.advDate) state.advDate = src.issue;
+    fillForm();
+    syncFinalAsk(); syncAdvLabels(); paint();
+    toast('Pulled ' + src.number + ' across');
+  });
+
+  /* actions */
+  $('#btnSave').addEventListener('click', saveDoc);
+  $('#btnPrint').addEventListener('click', doPrint);
+  $('#btnPrint2').addEventListener('click', doPrint);
+}
+
+function syncAdvLabels(){
+  const cur = state.currency;
+  $('#lblAdvVal').textContent  = state.advMode === 'pct' ? 'Advance (%)' : 'Advance amount (' + cur + ')';
+  $('#lblAdvRecv').textContent = state.advRecvMode === 'pct' ? 'Percentage received (%)' : 'Amount received (' + cur + ')';
+}
+
+function syncFinalAsk(){
+  const yes = state.hasAdvance === true, no = state.hasAdvance === false;
+  $('#ynYes').classList.toggle('on', yes);
+  $('#ynNo').classList.toggle('on', no);
+  $('#advReveal').hidden = !yes;
+
+  const pfs = docs.filter(x => x.type === 'proforma');
+  $('#pfPullWrap').hidden = !yes || pfs.length === 0;
+  if(pfs.length){
+    $('#fPullPf').innerHTML = '<option value="">Choose a proforma…</option>' + pfs.map(p =>
+      '<option value="' + p.id + '">' + esc(p.number) + ' — ' + esc(p.client.name || p.client.company || 'Untitled') + '</option>'
+    ).join('');
+  }
+}
+
+function fillForm(){
+  const d = state;
+  $('#fNumber').value = d.number;
+  $('#fIssue').value = d.issue;
+  $('#fDue').value = d.due;
+  $('#fcName').value = d.client.name;
+  $('#fcCompany').value = d.client.company;
+  $('#fcEmail').value = d.client.email;
+  $('#fcPhone').value = d.client.phone;
+  $('#fcAddr').value = d.client.addr;
+  $('#fpTitle').value = d.project.title;
+  $('#fpTimeline').value = d.project.timeline;
+  $('#fpScope').value = d.project.scope;
+  $('#fDiscVal').value = d.discVal;
+  $('#fDiscMode').value = d.discMode;
+  $('#fTaxRate').value = d.taxRate;
+  $('#fTaxLabel').value = d.taxLabel;
+  $('#fCurrency').value = d.currency;
+  $('#fAdvMode').value = d.advMode;
+  $('#fAdvVal').value = d.advVal;
+  $('#fBalanceWhen').value = d.balanceWhen;
+  $('#fAdvMode2').value = d.advRecvMode;
+  $('#fAdvRecv').value = d.advRecv;
+  $('#fAdvDate').value = d.advDate;
+  $('#fAdvRef').value = d.advRef;
+  $('#fBank').value = d.bank;
+  $('#fNotes').value = d.notes;
+  $('#fSignName').value = d.signName;
+  $('#fSignRole').value = d.signRole;
+  renderItemsEd();
+}
+
+function paint(){
+  $('#doc').innerHTML = renderDoc(state);
+  const c = compute(state);
+  $('#miniSub').innerHTML = 'Subtotal <b>' + money(c.sub, state.currency) + '</b>';
+  $('#itemsHint').textContent = state.items.length + (state.items.length === 1 ? ' line' : ' lines');
+  syncAdvLabels();
+}
+
+function openEditor(d){
+  state = d;
+  editingId = docs.some(x => x.id === d.id) ? d.id : null;
+  const isPf = d.type === 'proforma';
+
+  $('#edTitle').textContent = isPf ? 'Proforma invoice' : 'Final invoice';
+  $('#edTag').textContent = isPf ? 'Advance request' : 'Closing the project';
+  $('#edTag').className = 'tag ' + (isPf ? 'pf' : 'fi');
+  $('#edSub').textContent = isPf
+    ? 'Fill this in and the invoice builds itself on the right.'
+    : 'Fill this in, tell us about the advance, and we\u2019ll do the arithmetic.';
+  $('#lblDue').textContent = isPf ? 'Valid until' : 'Payment due';
+  $('#blockProforma').style.display = isPf ? '' : 'none';
+  $('#blockFinal').style.display = isPf ? 'none' : '';
+
+  fillForm();
+  syncFinalAsk();
+  paint();
+  go('editor');
+  window.scrollTo({top:0});
+}
+
+/* ------------------------------------------------------------ save / print */
+function saveDoc(){
+  if(!state.client.name && !state.client.company){ toast('Add a client name first'); $('#fcName').focus(); return; }
+  if(state.type === 'final' && state.hasAdvance === null){
+    toast('Answer the advance question first');
+    $('#blockFinal').scrollIntoView({behavior:'smooth', block:'center'});
+    return;
+  }
+  state.savedAt = Date.now();
+  const i = docs.findIndex(x => x.id === state.id);
+  if(i >= 0) docs[i] = JSON.parse(JSON.stringify(state));
+  else docs.unshift(JSON.parse(JSON.stringify(state)));
+  docs.sort((a,b) => (b.savedAt||0) - (a.savedAt||0));
+  docs = docs.slice(0, 60);
+  save(KEY.docs, docs);
+  commitNumber(state.type, state.number);
+  editingId = state.id;
+  renderRecent();
+  toast('Saved · ' + state.number);
+}
+
+function doPrint(){
+  if(state.type === 'final' && state.hasAdvance === null){
+    toast('Answer the advance question first');
+    $('#blockFinal').scrollIntoView({behavior:'smooth', block:'center'});
+    return;
+  }
+  window.print();
+}
+
+/* The browser names the PDF after document.title, so make it the invoice
+   number. Restored right after printing. */
+function stageForPrint(){
+  const clean = String(state && state.number || 'Invoice').replace(/[^\w\-. ]+/g, '');
+  const who = (state && (state.client.company || state.client.name) || '').replace(/[^\w\-. ]+/g, '').trim();
+  stageForPrint._title = document.title;
+  document.title = who ? clean + ' — ' + who : clean;
+  const holder = $('#printRoot');
+  holder.innerHTML = '';
+  const clone = $('#doc').cloneNode(true);
+  clone.removeAttribute('id');
+  holder.appendChild(clone);
+}
+function unstagePrint(){
+  document.title = stageForPrint._title || 'VBUILD · Invoices';
+  $('#printRoot').innerHTML = '';
+}
+window.addEventListener('beforeprint', stageForPrint);
+window.addEventListener('afterprint', unstagePrint);
+
+/* ------------------------------------------------------------ recent list */
+function renderRecent(){
+  const list = $('#recentList');
+  $('#recentCount').textContent = docs.length ? docs.length + (docs.length === 1 ? ' invoice' : ' invoices') + ' on this device' : '';
+  if(!docs.length){
+    list.innerHTML = '<div class="empty">Nothing saved yet. Your invoices stay on this device — nothing is uploaded anywhere.</div>';
+    return;
+  }
+  list.innerHTML = docs.map(d => {
+    const c = compute(d);
+    const isPf = d.type === 'proforma';
+    return '<div class="ritem">' +
+      '<span class="tag ' + (isPf ? 'pf' : 'fi') + '">' + (isPf ? 'Proforma' : 'Final') + '</span>' +
+      '<span class="rno">' + esc(d.number) + '</span>' +
+      '<span class="rwho">' + esc(d.client.name || d.client.company || 'Untitled') +
+        (d.project.title ? ' · ' + esc(d.project.title) : '') + '</span>' +
+      '<span class="ramt num">' + money(c.dueNow, d.currency) + '</span>' +
+      '<button class="btn btn-sm" data-open="' + d.id + '">Open</button>' +
+      '<button class="btn btn-sm btn-ghost" data-copy="' + d.id + '" title="Duplicate">Copy</button>' +
+      '<button class="x" data-rm="' + d.id + '" title="Delete" aria-label="Delete">&times;</button>' +
+    '</div>';
+  }).join('');
+}
+
+/* ------------------------------------------------------------ settings */
+function fillSettings(){
+  $('#sName').value = profile.name;
+  $('#sTagline').value = profile.tagline;
+  $('#sAddress').value = profile.address;
+  $('#sEmail').value = profile.email;
+  $('#sPhone').value = profile.phone;
+  $('#sWebsite').value = profile.website;
+  $('#sCurrency').value = profile.currency;
+  $('#sTaxRate').value = profile.taxRate;
+  $('#sTaxLabel').value = profile.taxLabel;
+  $('#sAdvPct').value = profile.advPct;
+  $('#sValidDays').value = profile.validDays;
+  $('#sPayDays').value = profile.payDays;
+  $('#sPrefixPf').value = profile.prefixPf;
+  $('#sPrefixFi').value = profile.prefixFi;
+  $('#sWords').value = String(profile.showWords ? 1 : 0);
+  $('#sBank').value = profile.bank;
+  $('#sTermsPf').value = profile.termsPf;
+  $('#sTermsFi').value = profile.termsFi;
+  $('#sSignName').value = profile.signName;
+  $('#sSignRole').value = profile.signRole;
+  paintLogo();
+  $('#swatches').innerHTML = ACCENTS.map(h =>
+    '<button class="sw' + (h === profile.accent ? ' on' : '') + '" data-hex="' + h + '" style="background:' + h + '" title="' + h + '"></button>'
+  ).join('');
+}
+function paintLogo(){
+  $('#logoPrev').innerHTML = profile.logo
+    ? '<img src="' + esc(profile.logo) + '" alt="Logo">'
+    : '<span>No logo</span>';
+}
+function bindSettings(){
+  $('#logoPick').addEventListener('click', () => $('#logoInput').click());
+  $('#logoInput').addEventListener('change', e => {
+    const f = e.target.files && e.target.files[0];
+    if(!f) return;
+    if(f.size > 1200000){ toast('That image is a bit large — try under 1 MB'); return; }
+    const r = new FileReader();
+    r.onload = () => { profile.logo = r.result; paintLogo(); };
+    r.readAsDataURL(f);
+  });
+  $('#logoClear').addEventListener('click', () => { profile.logo = ''; paintLogo(); });
+  $('#swatches').addEventListener('click', e => {
+    const b = e.target.closest('[data-hex]'); if(!b) return;
+    profile.accent = b.dataset.hex;
+    setAccent(profile.accent);
+    $$('#swatches .sw').forEach(s => s.classList.toggle('on', s.dataset.hex === profile.accent));
+  });
+  $('#btnSaveProfile').addEventListener('click', () => {
+    profile.name = $('#sName').value.trim() || 'VBUILD';
+    profile.tagline = $('#sTagline').value;
+    profile.address = $('#sAddress').value;
+    profile.email = $('#sEmail').value;
+    profile.phone = $('#sPhone').value;
+    profile.website = $('#sWebsite').value;
+    profile.currency = $('#sCurrency').value;
+    profile.taxRate = parseFloat($('#sTaxRate').value) || 0;
+    profile.taxLabel = $('#sTaxLabel').value;
+    profile.advPct = parseFloat($('#sAdvPct').value) || 0;
+    profile.validDays = parseInt($('#sValidDays').value) || 14;
+    profile.payDays = parseInt($('#sPayDays').value) || 0;
+    profile.prefixPf = $('#sPrefixPf').value.trim() || 'VB-PF';
+    profile.prefixFi = $('#sPrefixFi').value.trim() || 'VB-INV';
+    profile.showWords = Number($('#sWords').value) ? 1 : 0;
+    profile.bank = $('#sBank').value;
+    profile.termsPf = $('#sTermsPf').value;
+    profile.termsFi = $('#sTermsFi').value;
+    profile.signName = $('#sSignName').value;
+    profile.signRole = $('#sSignRole').value;
+    save(KEY.profile, profile);
+    toast('Company details saved');
+    go('home');
+  });
+}
+
+/* ------------------------------------------------------------ nav */
+function go(name){
+  $$('.screen').forEach(s => s.classList.remove('is-active'));
+  $('#screen-' + name).classList.add('is-active');
+  if(name === 'home') renderRecent();
+  if(name === 'settings') fillSettings();
+  window.scrollTo({top:0});
+}
+
+function greeting(){
+  const h = new Date().getHours();
+  return h < 12 ? 'Good morning' : h < 17 ? 'Good afternoon' : 'Good evening';
+}
+
+/* ------------------------------------------------------------ boot */
+function init(){
+  fillCurrencySelects();
+  setAccent(profile.accent);
+  $('#greeting').textContent = greeting();
+  bindEditor();
+  bindSettings();
+
+  $$('[data-go]').forEach(b => b.addEventListener('click', () => go(b.dataset.go)));
+  $$('[data-new]').forEach(b => b.addEventListener('click', () => openEditor(blankDoc(b.dataset.new))));
+
+  $('#recentList').addEventListener('click', e => {
+    const open = e.target.closest('[data-open]');
+    const copy = e.target.closest('[data-copy]');
+    const rm   = e.target.closest('[data-rm]');
+    if(open){
+      const d = docs.find(x => x.id === open.dataset.open);
+      if(d) openEditor(JSON.parse(JSON.stringify(d)));
+    } else if(copy){
+      const src = docs.find(x => x.id === copy.dataset.copy);
+      if(!src) return;
+      const d = JSON.parse(JSON.stringify(src));
+      d.id = 'd' + Date.now().toString(36) + Math.random().toString(36).slice(2,6);
+      d.number = nextNumber(d.type);
+      d.issue = todayISO();
+      d.due = addDaysISO(d.issue, d.type === 'proforma' ? profile.validDays : profile.payDays);
+      d.savedAt = null;
+      openEditor(d);
+      toast('Copied — new number assigned');
+    } else if(rm){
+      docs = docs.filter(x => x.id !== rm.dataset.rm);
+      save(KEY.docs, docs);
+      renderRecent();
+      toast('Deleted');
+    }
+  });
+
+  /* Ctrl/Cmd + S saves, Ctrl/Cmd + P prints the invoice */
+  document.addEventListener('keydown', e => {
+    const cmd = e.metaKey || e.ctrlKey;
+    if(!cmd) return;
+    if(e.key.toLowerCase() === 's' && state && $('#screen-editor').classList.contains('is-active')){
+      e.preventDefault(); saveDoc();
+    }
+  });
+
+  renderRecent();
+}
+init();
+</script>
+</body>
+</html>
