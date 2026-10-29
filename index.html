@@ -26,6 +26,7 @@
   --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
 }
 *,*::before,*::after{box-sizing:border-box}
+[hidden]{display:none!important}
 html,body{margin:0;padding:0}
 body{
   font-family:var(--sans);
@@ -91,7 +92,7 @@ h1,h2,h3,h4,p{margin:0}
 .hello{font-size:13px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--accent)}
 .home h1{font-size:clamp(28px,4.4vw,42px);letter-spacing:-1.2px;margin:12px 0 10px;font-weight:700}
 .home .lede{color:var(--ink-2);max-width:46ch;font-size:17px}
-.choices{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px;margin-top:36px}
+.choices{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin-top:36px}
 .choice{
   position:relative;text-align:left;
   background:var(--card);border:1px solid var(--line);border-radius:18px;
@@ -136,6 +137,8 @@ svg.ar.back{transform:rotate(180deg)}
 }
 .tag.pf{background:var(--accent-soft);color:#b8460b}
 .tag.fi{background:#e8f2ec;color:#1d6b4a}
+.tag.mo{background:#e9eefb;color:#2c4aa0}
+.show-all{margin-top:10px}
 .empty{
   border:1px dashed var(--line);border-radius:12px;padding:26px;
   text-align:center;color:var(--ink-3);font-size:14px;background:rgba(255,255,255,.5);
@@ -173,7 +176,7 @@ label{font-size:12.5px;font-weight:600;color:var(--ink-2)}
 }
 .ctl:focus{outline:0;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
 textarea.ctl{resize:vertical;min-height:66px;line-height:1.45}
-select.ctl{appearance:none;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'><path d='M3 4.5 6 8l3-3.5' fill='none' stroke='%23565d67' stroke-width='1.4' stroke-linecap='round' stroke-linejoin='round'/></svg>");background-repeat:no-repeat;background-position:right 10px center;padding-right:30px}
+select.ctl{appearance:none;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'><path d='M3 4.5 6 8l3-3.5' fill='none' stroke='%23565d67' stroke-width='1.4' stroke-linecap='round' stroke-linejoin='round'/></svg>");background-repeat:no-repeat;background-position:right 11px center;background-size:11px 11px;padding-right:30px}
 .help{font-size:12px;color:var(--ink-3)}
 
 /* line items */
@@ -257,6 +260,47 @@ select.ctl{appearance:none;background-image:url("data:image/svg+xml;utf8,<svg xm
 .swatches{display:flex;gap:8px;flex-wrap:wrap}
 .sw{width:30px;height:30px;border-radius:9px;border:2px solid transparent;box-shadow:var(--shadow-sm);padding:0}
 .sw.on{border-color:var(--ink)}
+
+/* ============================================================ monthly clients */
+.monthly{max-width:1060px;margin:0 auto;padding:40px 22px 90px}
+.monthly-head{display:flex;align-items:flex-end;gap:16px;flex-wrap:wrap;margin-bottom:26px}
+.monthly-head h1{font-size:28px;letter-spacing:-.8px;margin-bottom:6px}
+.monthly-head .lede{color:var(--ink-2);max-width:54ch}
+.ccards{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px}
+.ccard{
+  background:var(--card);border:1px solid var(--line);border-radius:16px;
+  padding:18px;box-shadow:var(--shadow-sm);display:flex;flex-direction:column;gap:14px;
+  transition:box-shadow .15s ease, border-color .15s ease;
+}
+.ccard:hover{box-shadow:var(--shadow-md);border-color:#d8d1c4}
+.ccard-top{display:flex;gap:12px;align-items:flex-start}
+.avatar{
+  width:40px;height:40px;border-radius:12px;background:var(--accent-soft);color:var(--accent);
+  font-weight:750;font-size:14px;display:grid;place-items:center;flex:none;letter-spacing:-.3px;
+}
+.ccard-who{flex:1;min-width:0}
+.ccard-who h3{font-size:15.5px;letter-spacing:-.2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ccard-who p{font-size:13px;color:var(--ink-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ccard-gen{display:grid;grid-template-columns:1fr 96px;gap:10px 8px;padding:12px;background:var(--bg);border-radius:12px}
+.ccard-gen .amt-field{grid-column:span 2}
+.ccard-gen label{font-size:11.5px}
+.ccard-status{font-size:12.5px;color:var(--ink-3);min-height:19px;margin-top:-4px}
+.ccard-status.warn{color:#a53f07}
+.link{background:none;border:0;padding:0;color:inherit;font-weight:650;text-decoration:underline;text-underline-offset:2px}
+.ccard-foot{display:flex;gap:10px;align-items:center}
+.ccard-last{font-size:12.5px;color:var(--ink-3);flex:1;min-width:0}
+.ccard-last b{color:var(--ink-2);font-weight:600}
+.ccard.add{
+  border-style:dashed;background:rgba(255,255,255,.55);box-shadow:none;
+  align-items:center;justify-content:center;text-align:center;min-height:230px;
+  color:var(--ink-2);cursor:pointer;font-weight:600;
+}
+.ccard.add:hover{border-color:var(--accent);color:var(--accent)}
+.ccard.add .plus{
+  width:40px;height:40px;border-radius:12px;background:var(--accent-soft);color:var(--accent);
+  display:grid;place-items:center;font-size:22px;font-weight:500;line-height:1;
+}
+.ccard.add small{display:block;font-weight:400;color:var(--ink-3);font-size:13px;max-width:30ch;margin-top:2px}
 
 /* ============================================================ toast */
 #toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(20px);z-index:80;
@@ -372,6 +416,9 @@ table.doc-tot tr.less td:last-child{color:#15171b}
   .form-wrap{max-width:none}
 }
 @media (max-width:620px){
+  .ccards{grid-template-columns:1fr}
+  .topbar{padding:12px 14px;gap:6px}
+  .topbar .logo-text span{display:none}
   .pane-form,.pane-view{padding:18px 16px}
   .grid2,.grid3{grid-template-columns:1fr}
   .field.span2{grid-column:auto}
@@ -420,6 +467,7 @@ table.doc-tot tr.less td:last-child{color:#15171b}
       <span class="logo-text">VBUILD <span>Invoices</span></span>
     </button>
     <span class="topbar-spacer"></span>
+    <button class="btn btn-sm btn-ghost" data-go="monthly">Monthly clients</button>
     <button class="btn btn-sm btn-ghost" data-go="settings">Company details</button>
   </header>
 
@@ -428,7 +476,7 @@ table.doc-tot tr.less td:last-child{color:#15171b}
     <div class="home">
       <p class="hello" id="greeting">Good day</p>
       <h1>What are we billing today?</h1>
-      <p class="lede">Two paths. Ask for the advance up front, or close the project out and collect what's left.</p>
+      <p class="lede">Ask for the advance up front, close a project out, or send a regular client this month's invoice.</p>
 
       <div class="choices">
         <button class="choice" data-new="proforma">
@@ -442,6 +490,12 @@ table.doc-tot tr.less td:last-child{color:#15171b}
           <h3>Final invoice</h3>
           <p>Project delivered. We'll ask whether you already took an advance and work out the balance from there.</p>
           <span class="arrow">Start a final invoice <svg class="ar" viewBox="0 0 16 16"><path d="M2.5 8h11M9.5 4l4 4-4 4"/></svg></span>
+        </button>
+        <button class="choice" data-go="monthly">
+          <span class="choice-ic"><svg viewBox="0 0 24 24"><path d="M20 11a8 8 0 0 0-14.3-4.9L4 8M4 4v4h4M4 13a8 8 0 0 0 14.3 4.9L20 16M20 20v-4h-4"/></svg></span>
+          <h3>Monthly invoice</h3>
+          <p>For retainers, maintenance and hosting. Save the client once. After that, pick the month, check the amount, done.</p>
+          <span class="arrow">Open monthly clients <svg class="ar" viewBox="0 0 16 16"><path d="M2.5 8h11M9.5 4l4 4-4 4"/></svg></span>
         </button>
       </div>
 
@@ -481,6 +535,16 @@ table.doc-tot tr.less td:last-child{color:#15171b}
               <div class="field">
                 <label for="fDue" id="lblDue">Valid until</label>
                 <input class="ctl" id="fDue" type="date">
+              </div>
+            </div>
+            <div class="grid3" id="periodRow" style="margin-top:12px">
+              <div class="field">
+                <label for="fMonth">Billing month</label>
+                <select class="ctl" id="fMonth"></select>
+              </div>
+              <div class="field">
+                <label for="fYear">Year</label>
+                <select class="ctl" id="fYear"></select>
               </div>
             </div>
           </div>
@@ -675,7 +739,7 @@ table.doc-tot tr.less td:last-child{color:#15171b}
         </div>
 
         <div class="actions">
-          <button class="btn btn-ghost" data-go="home"><svg class="ar back" viewBox="0 0 16 16"><path d="M2.5 8h11M9.5 4l4 4-4 4"/></svg> Back</button>
+          <button class="btn btn-ghost" data-go="home" id="edBack"><svg class="ar back" viewBox="0 0 16 16"><path d="M2.5 8h11M9.5 4l4 4-4 4"/></svg> Back</button>
           <span class="grow"></span>
           <button class="btn" id="btnSave">Save</button>
           <button class="btn btn-accent" id="btnPrint">Download PDF</button>
@@ -695,6 +759,121 @@ table.doc-tot tr.less td:last-child{color:#15171b}
         </div>
       </section>
 
+    </div>
+  </main>
+
+  <!-- ===================================================== MONTHLY CLIENTS -->
+  <main id="screen-monthly" class="screen">
+    <div class="monthly">
+      <div class="monthly-head">
+        <div style="flex:1;min-width:260px">
+          <h1>Monthly clients</h1>
+          <p class="lede">Set a client up once. Each month after that, pick the month, check the amount and hit generate.</p>
+        </div>
+        <button class="btn btn-primary" data-addclient>+ Add a client</button>
+      </div>
+      <div class="ccards" id="ccards"></div>
+    </div>
+  </main>
+
+  <!-- ===================================================== MONTHLY CLIENT SETUP -->
+  <main id="screen-client" class="screen">
+    <div class="editor">
+      <section class="pane-form">
+        <div class="form-wrap">
+          <div class="eyebrow">
+            <h1 id="clTitle">New monthly client</h1>
+            <span class="tag mo">Monthly</span>
+          </div>
+          <p class="eyebrow-sub">These details go on every monthly invoice for this client. You can still change anything on a single invoice before you send it.</p>
+
+          <div class="block">
+            <div class="block-h"><span class="step">1</span><h2>Who's it for</h2></div>
+            <div class="grid2">
+              <div class="field">
+                <label for="clName">Client name</label>
+                <input class="ctl" id="clName" placeholder="Nadeesha Perera">
+              </div>
+              <div class="field">
+                <label for="clCompany">Company</label>
+                <input class="ctl" id="clCompany" placeholder="Lanka Trade (Pvt) Ltd">
+              </div>
+              <div class="field">
+                <label for="clEmail">Email</label>
+                <input class="ctl" id="clEmail" placeholder="accounts@lankatrade.lk">
+              </div>
+              <div class="field">
+                <label for="clPhone">Phone</label>
+                <input class="ctl" id="clPhone" placeholder="+94 77 000 0000">
+              </div>
+              <div class="field span2">
+                <label for="clAddr">Address <span class="help">optional</span></label>
+                <textarea class="ctl" id="clAddr" rows="2" placeholder="No. 24, Galle Road&#10;Colombo 03"></textarea>
+              </div>
+            </div>
+          </div>
+
+          <div class="block">
+            <div class="block-h"><span class="step">2</span><h2>What you bill each month</h2></div>
+            <div class="grid2">
+              <div class="field span2">
+                <label for="clService">Service</label>
+                <input class="ctl" id="clService" placeholder="Website maintenance &amp; hosting">
+                <span class="help">The invoice line reads like this, with the month added: <i id="clLineEg">Website maintenance &amp; hosting — October 2026</i></span>
+              </div>
+              <div class="field span2">
+                <label for="clDetail">What's included <span class="help">optional, shown in small print under the line</span></label>
+                <input class="ctl" id="clDetail" placeholder="Up to 6 hours of changes, daily backups and uptime monitoring">
+              </div>
+              <div class="field">
+                <label for="clAmount" id="lblClAmount">Usual monthly amount</label>
+                <input class="ctl num" id="clAmount" type="number" min="0" step="0.01" value="0">
+                <span class="help">Before tax. You can change it each month.</span>
+              </div>
+              <div class="field">
+                <label for="clCurrency">Currency</label>
+                <select class="ctl" id="clCurrency"></select>
+              </div>
+            </div>
+          </div>
+
+          <div class="block">
+            <div class="block-h"><span class="step">3</span><h2>Tax &amp; payment</h2></div>
+            <div class="grid2">
+              <div class="field">
+                <label for="clTax" id="lblClTax">Tax rate (%)</label>
+                <input class="ctl num" id="clTax" type="number" min="0" step="0.01" value="0">
+              </div>
+              <div class="field">
+                <label for="clPayDays">Payment due in (days)</label>
+                <input class="ctl num" id="clPayDays" type="number" min="0" step="1" value="7">
+              </div>
+              <div class="field span2">
+                <label for="clNotes">Terms &amp; notes <span class="help">leave blank to use your default terms</span></label>
+                <textarea class="ctl" id="clNotes" rows="3"></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button class="btn btn-ghost" data-go="monthly"><svg class="ar back" viewBox="0 0 16 16"><path d="M2.5 8h11M9.5 4l4 4-4 4"/></svg> Back</button>
+          <span class="grow"></span>
+          <button class="btn btn-ghost" id="btnDelClient">Remove client</button>
+          <button class="btn btn-primary" id="btnSaveClient">Save client</button>
+        </div>
+      </section>
+
+      <section class="pane-view">
+        <div class="pane-inner">
+          <div class="view-bar">
+            <span class="lbl">Sample: this month's invoice</span>
+          </div>
+          <div class="view-scroll">
+            <div class="doc" id="clDoc"></div>
+          </div>
+        </div>
+      </section>
     </div>
   </main>
 
@@ -837,7 +1016,10 @@ table.doc-tot tr.less td:last-child{color:#15171b}
 const $  = (s, r=document) => r.querySelector(s);
 const $$ = (s, r=document) => [...r.querySelectorAll(s)];
 
-const KEY = { profile:'vbuild.profile.v2', docs:'vbuild.docs.v2', seq:'vbuild.seq.v2' };
+const KEY = { profile:'vbuild.profile.v2', docs:'vbuild.docs.v2', seq:'vbuild.seq.v2', clients:'vbuild.clients.v1' };
+/* Monthly clients add 12 invoices a year each, so keep plenty of history. */
+const MAX_DOCS = 1000;
+const RECENT_SHOWN = 8;
 
 const CURRENCIES = {
   LKR:{sym:'Rs.',  unit:'Rupees',  sub:'Cents', name:'Sri Lankan Rupee'},
@@ -855,7 +1037,8 @@ const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov
 
 /* ------------------------------------------------------------ storage */
 const load = (k, fb) => { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : fb; } catch(e){ return fb; } };
-const save = (k, v)  => { try { localStorage.setItem(k, JSON.stringify(v)); } catch(e){} };
+/* Returns false when the browser refuses the write (usually storage full). */
+const save = (k, v)  => { try { localStorage.setItem(k, JSON.stringify(v)); return true; } catch(e){ return false; } };
 
 const DEFAULT_PROFILE = {
   name:'VBUILD',
@@ -885,8 +1068,31 @@ const DEFAULT_PROFILE = {
 let profile = Object.assign({}, DEFAULT_PROFILE, load(KEY.profile, {}));
 let docs    = load(KEY.docs, []);
 let seq     = load(KEY.seq, {});
+let clients = load(KEY.clients, []);
 let state   = null;
 let editingId = null;
+let clientDraft = null;
+let showAllRecent = false;
+
+const FULL_MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+const thisPeriod  = () => { const d = new Date(); return {y:d.getFullYear(), m:d.getMonth()}; };
+const nextPeriod  = p => p.m === 11 ? {y:p.y + 1, m:0} : {y:p.y, m:p.m + 1};
+const periodKey   = p => p ? p.y * 12 + p.m : -1;
+const periodLabel = p => p ? FULL_MONTHS[p.m] + ' ' + p.y : '';
+function monthOptions(sel){
+  return FULL_MONTHS.map((n, i) => '<option value="' + i + '"' + (i === sel ? ' selected' : '') + '>' + n + '</option>').join('');
+}
+function yearOptions(sel){
+  const now = new Date().getFullYear();
+  const years = [];
+  for(let y = Math.min(now - 2, sel); y <= Math.max(now + 1, sel); y++) years.push(y);
+  return years.map(y => '<option value="' + y + '"' + (y === sel ? ' selected' : '') + '>' + y + '</option>').join('');
+}
+function initials(s){
+  const words = String(s || '').replace(/\(.*?\)/g, ' ').trim().split(/\s+/).filter(Boolean);
+  return (words.slice(0, 2).map(w => w[0]).join('') || '?').toUpperCase();
+}
+const newId = p => p + Date.now().toString(36) + Math.random().toString(36).slice(2,6);
 
 /* ------------------------------------------------------------ helpers */
 function esc(s){
@@ -970,16 +1176,20 @@ function tint(hex, a){
 }
 
 /* ------------------------------------------------------------ numbering */
+/* Final and monthly invoices are both tax invoices, so they share one
+   unbroken number series. Proformas have their own. */
+const seriesOf = type => type === 'proforma' ? 'proforma' : 'final';
+
 function nextNumber(type){
   const prefix = type === 'proforma' ? profile.prefixPf : profile.prefixFi;
   const year = new Date().getFullYear();
-  const k = type + ':' + year;
+  const k = seriesOf(type) + ':' + year;
   const n = (seq[k] || 0) + 1;
   return prefix + '-' + year + '-' + String(n).padStart(3, '0');
 }
 function commitNumber(type, number){
   const year = new Date().getFullYear();
-  const k = type + ':' + year;
+  const k = seriesOf(type) + ':' + year;
   const m = String(number || '').match(/(\d+)\s*$/);
   const n = m ? Number(m[1]) : 0;
   if(n > (seq[k] || 0)){ seq[k] = n; save(KEY.seq, seq); }
@@ -988,8 +1198,10 @@ function commitNumber(type, number){
 /* ------------------------------------------------------------ model */
 function blankDoc(type){
   return {
-    id: 'd' + Date.now().toString(36) + Math.random().toString(36).slice(2,6),
+    id: newId('d'),
     type,
+    clientId: null,
+    period: type === 'monthly' ? thisPeriod() : null,
     number: nextNumber(type),
     issue: todayISO(),
     due: addDaysISO(todayISO(), type === 'proforma' ? profile.validDays : profile.payDays),
@@ -1038,6 +1250,27 @@ function compute(d){
   return {sub, disc, net, tax, total, advance, balance, dueNow, advPctOfTotal};
 }
 
+/* A monthly invoice, built from a saved client for one month and amount. */
+function docFromClient(cl, period, amount){
+  const d = blankDoc('monthly');
+  d.clientId = cl.id;
+  d.period = {y:period.y, m:period.m};
+  d.client = {name:cl.name || '', company:cl.company || '', email:cl.email || '', phone:cl.phone || '', addr:cl.addr || ''};
+  d.project = {title:cl.service || '', timeline:'', scope:''};
+  d.items = [{
+    desc: (cl.service || 'Monthly services') + ' \u2014 ' + periodLabel(period),
+    note: cl.detail || '',
+    qty: 1,
+    rate: Number(amount) || 0
+  }];
+  d.currency = cl.currency || profile.currency;
+  d.taxRate = Number(cl.taxRate) || 0;
+  const days = (cl.payDays === '' || cl.payDays == null) ? profile.payDays : cl.payDays;
+  d.due = addDaysISO(d.issue, Number(days) || 0);
+  d.notes = (cl.notes || '').trim() ? cl.notes : profile.termsFi;
+  return d;
+}
+
 /* =====================================================================
    THE DOCUMENT
    Everything below renders only VBUILD's brand and the client's data.
@@ -1046,6 +1279,7 @@ function renderDoc(d){
   const c = compute(d);
   const cur = d.currency;
   const isPf = d.type === 'proforma';
+  const isMo = d.type === 'monthly';
 
   /* brand block */
   const brandMark = profile.logo
@@ -1060,7 +1294,8 @@ function renderDoc(d){
     ['Date issued', prettyDate(d.issue)],
     [isPf ? 'Valid until' : 'Payment due', prettyDate(d.due)]
   ].filter(r => r[1]);
-  if(!isPf && d.hasAdvance === true && d.advRef) meta.push(['Proforma ref.', d.advRef]);
+  if(isMo && d.period) meta.push(['Billing period', periodLabel(d.period)]);
+  if(d.type === 'final' && d.hasAdvance === true && d.advRef) meta.push(['Proforma ref.', d.advRef]);
 
   /* parties */
   const clientLines = [d.client.company && d.client.name ? d.client.company : '', d.client.addr,
@@ -1087,9 +1322,9 @@ function renderDoc(d){
   if(c.tax > 0.004){
     tot += '<tr><td>' + esc(d.taxLabel || 'Tax') + ' (' + (+d.taxRate) + '%)</td><td class="num">' + money(c.tax, cur) + '</td></tr>';
   }
-  tot += '<tr class="grand"><td>Total project value</td><td class="num">' + money(c.total, cur) + '</td></tr>';
+  tot += '<tr class="grand"><td>' + (isMo ? 'Total' : 'Total project value') + '</td><td class="num">' + money(c.total, cur) + '</td></tr>';
 
-  if(!isPf && d.hasAdvance === true){
+  if(d.type === 'final' && d.hasAdvance === true){
     tot += '<tr class="less sep"><td>Advance received' + (d.advDate ? ' · ' + esc(prettyDate(d.advDate)) : '') +
            '</td><td class="num">− ' + money(c.advance, cur) + '</td></tr>';
   }
@@ -1099,6 +1334,9 @@ function renderDoc(d){
   if(isPf){
     dueLabel = 'Advance payable now';
     dueSub = (c.advPctOfTotal > 0 ? Math.round(c.advPctOfTotal * 10) / 10 + '% of the total project value' : 'To commence work');
+  } else if(isMo){
+    dueLabel = 'Amount due';
+    dueSub = d.period ? 'For ' + periodLabel(d.period) : '';
   } else if(d.hasAdvance === true){
     dueLabel = 'Balance now due';
     dueSub = 'Total project value less the advance already received';
@@ -1118,6 +1356,8 @@ function renderDoc(d){
 
   const closing = isPf
     ? '<strong>Thank you for choosing ' + esc(profile.name || 'VBUILD') + '.</strong><br>Approve this proforma and settle the advance, and we\u2019ll get straight to work.'
+    : isMo
+    ? '<strong>Thank you for your continued business.</strong><br>Any questions about this invoice, just get in touch.'
     : '<strong>Thank you for your business.</strong><br>It\u2019s been a pleasure building this with you.';
 
   const signName = d.signName || profile.signName;
@@ -1145,8 +1385,8 @@ function renderDoc(d){
       (clientLines ? '<div class="doc-lines">' + esc(clientLines) + '</div>' : '') +
     '</div>' +
     '<div>' +
-      '<h4>Project</h4>' +
-      '<div class="doc-who">' + esc(d.project.title || 'Project title') + '</div>' +
+      '<h4>' + (isMo ? 'Service' : 'Project') + '</h4>' +
+      '<div class="doc-who">' + esc(d.project.title || (isMo ? 'Monthly services' : 'Project title')) + '</div>' +
       (d.project.timeline ? '<div class="doc-kv">Timeline: <b>' + esc(d.project.timeline) + '</b></div>' : '') +
       '<div class="doc-kv">Currency: <b>' + esc(d.currency) + '</b> · ' + esc((CURRENCIES[d.currency]||{}).name || '') + '</div>' +
     '</div>' +
@@ -1194,6 +1434,7 @@ function fillCurrencySelects(){
     .map(k => '<option value="' + k + '">' + k + ' — ' + CURRENCIES[k].name + '</option>').join('');
   $('#fCurrency').innerHTML = opts;
   $('#sCurrency').innerHTML = opts;
+  $('#clCurrency').innerHTML = opts;
 }
 
 function renderItemsEd(){
@@ -1301,6 +1542,20 @@ function bindEditor(){
     toast('Pulled ' + src.number + ' across');
   });
 
+  /* billing month (monthly invoices only) */
+  const onPeriod = () => {
+    const before = periodLabel(state.period);
+    state.period = {y:+$('#fYear').value, m:+$('#fMonth').value};
+    const after = periodLabel(state.period);
+    if(before && before !== after){
+      state.items.forEach(i => { if(i.desc && i.desc.includes(before)) i.desc = i.desc.split(before).join(after); });
+      renderItemsEd();
+    }
+    syncMonthlyTag(); paint();
+  };
+  $('#fMonth').addEventListener('change', onPeriod);
+  $('#fYear').addEventListener('change', onPeriod);
+
   /* actions */
   $('#btnSave').addEventListener('click', saveDoc);
   $('#btnPrint').addEventListener('click', doPrint);
@@ -1357,6 +1612,11 @@ function fillForm(){
   $('#fNotes').value = d.notes;
   $('#fSignName').value = d.signName;
   $('#fSignRole').value = d.signRole;
+  if(d.type === 'monthly'){
+    const p = d.period || thisPeriod();
+    $('#fMonth').innerHTML = monthOptions(p.m);
+    $('#fYear').innerHTML = yearOptions(p.y);
+  }
   renderItemsEd();
 }
 
@@ -1372,18 +1632,31 @@ function openEditor(d){
   state = d;
   editingId = docs.some(x => x.id === d.id) ? d.id : null;
   const isPf = d.type === 'proforma';
+  const isMo = d.type === 'monthly';
 
-  $('#edTitle').textContent = isPf ? 'Proforma invoice' : 'Final invoice';
+  $('#edTitle').textContent = isPf ? 'Proforma invoice' : isMo ? 'Monthly invoice' : 'Final invoice';
   $('#edTag').textContent = isPf ? 'Advance request' : 'Closing the project';
-  $('#edTag').className = 'tag ' + (isPf ? 'pf' : 'fi');
+  $('#edTag').className = 'tag ' + (isPf ? 'pf' : isMo ? 'mo' : 'fi');
   $('#edSub').textContent = isPf
     ? 'Fill this in and the invoice builds itself on the right.'
+    : isMo
+    ? 'Filled in from the client\u2019s setup. Add anything extra for this month, then download.'
     : 'Fill this in, tell us about the advance, and we\u2019ll do the arithmetic.';
   $('#lblDue').textContent = isPf ? 'Valid until' : 'Payment due';
   $('#blockProforma').style.display = isPf ? '' : 'none';
-  $('#blockFinal').style.display = isPf ? 'none' : '';
+  $('#blockFinal').style.display = d.type === 'final' ? '' : 'none';
+  $('#periodRow').style.display = isMo ? '' : 'none';
+  $('#edBack').dataset.go = isMo ? 'monthly' : 'home';
+
+  /* keep the step numbers 1, 2, 3... whichever blocks are showing */
+  let step = 0;
+  $$('#screen-editor .block').forEach(b => {
+    const s = b.querySelector('.step');
+    if(s && b.style.display !== 'none') s.textContent = ++step;
+  });
 
   fillForm();
+  syncMonthlyTag();
   syncFinalAsk();
   paint();
   go('editor');
@@ -1398,17 +1671,44 @@ function saveDoc(){
     $('#blockFinal').scrollIntoView({behavior:'smooth', block:'center'});
     return;
   }
-  state.savedAt = Date.now();
-  const i = docs.findIndex(x => x.id === state.id);
-  if(i >= 0) docs[i] = JSON.parse(JSON.stringify(state));
-  else docs.unshift(JSON.parse(JSON.stringify(state)));
-  docs.sort((a,b) => (b.savedAt||0) - (a.savedAt||0));
-  docs = docs.slice(0, 60);
-  save(KEY.docs, docs);
-  commitNumber(state.type, state.number);
+  const before = state.number;
+  if(!persistDoc(state)) return;
   editingId = state.id;
   renderRecent();
-  toast('Saved · ' + state.number);
+  if(state.number !== before){
+    $('#fNumber').value = state.number;
+    paint();
+    toast('Saved as ' + state.number + ' (' + before + ' was already taken)');
+  } else {
+    toast('Saved · ' + state.number);
+  }
+}
+
+/* Writes one invoice to history. Returns false if nothing was saved. */
+function persistDoc(d){
+  const isNew = !docs.some(x => x.id === d.id);
+  const clash = docs.find(x => x.id !== d.id && seriesOf(x.type) === seriesOf(d.type) && x.number === d.number);
+  if(clash){
+    if(!isNew){ toast(d.number + ' is already used by another invoice'); return false; }
+    d.number = nextNumber(d.type);
+  }
+  d.savedAt = Date.now();
+  const copy = JSON.parse(JSON.stringify(d));
+  const next = docs.filter(x => x.id !== d.id);
+  next.unshift(copy);
+  next.sort((a,b) => (b.savedAt||0) - (a.savedAt||0));
+  const kept = next.slice(0, MAX_DOCS);
+  if(!save(KEY.docs, kept)){
+    toast('Couldn\u2019t save. This browser\u2019s storage is full.');
+    return false;
+  }
+  docs = kept;
+  commitNumber(d.type, d.number);
+  return true;
+}
+
+function syncMonthlyTag(){
+  if(state && state.type === 'monthly') $('#edTag').textContent = periodLabel(state.period) || 'Monthly';
 }
 
 function doPrint(){
@@ -1448,20 +1748,27 @@ function renderRecent(){
     list.innerHTML = '<div class="empty">Nothing saved yet. Your invoices stay on this device — nothing is uploaded anywhere.</div>';
     return;
   }
-  list.innerHTML = docs.map(d => {
+  const TAGS = {proforma:['pf','Proforma'], final:['fi','Final'], monthly:['mo','Monthly']};
+  const shown = showAllRecent ? docs : docs.slice(0, RECENT_SHOWN);
+  list.innerHTML = shown.map(d => {
     const c = compute(d);
-    const isPf = d.type === 'proforma';
+    const t = TAGS[d.type] || TAGS.final;
+    const what = d.type === 'monthly' ? periodLabel(d.period) : d.project.title;
     return '<div class="ritem">' +
-      '<span class="tag ' + (isPf ? 'pf' : 'fi') + '">' + (isPf ? 'Proforma' : 'Final') + '</span>' +
+      '<span class="tag ' + t[0] + '">' + t[1] + '</span>' +
       '<span class="rno">' + esc(d.number) + '</span>' +
-      '<span class="rwho">' + esc(d.client.name || d.client.company || 'Untitled') +
-        (d.project.title ? ' · ' + esc(d.project.title) : '') + '</span>' +
+      '<span class="rwho">' + esc(d.client.company || d.client.name || 'Untitled') +
+        (what ? ' · ' + esc(what) : '') + '</span>' +
       '<span class="ramt num">' + money(c.dueNow, d.currency) + '</span>' +
       '<button class="btn btn-sm" data-open="' + d.id + '">Open</button>' +
       '<button class="btn btn-sm btn-ghost" data-copy="' + d.id + '" title="Duplicate">Copy</button>' +
       '<button class="x" data-rm="' + d.id + '" title="Delete" aria-label="Delete">&times;</button>' +
     '</div>';
-  }).join('');
+  }).join('') +
+  (docs.length > RECENT_SHOWN
+    ? '<button class="btn btn-sm btn-ghost show-all" data-showall>' +
+      (showAllRecent ? 'Show fewer' : 'Show all ' + docs.length) + '</button>'
+    : '');
 }
 
 /* ------------------------------------------------------------ settings */
@@ -1540,12 +1847,194 @@ function bindSettings(){
   });
 }
 
+/* =====================================================================
+   monthly clients
+   ===================================================================== */
+const monthlyDocsFor = id => docs.filter(d => d.type === 'monthly' && d.clientId === id && d.period);
+function lastInvoiceFor(id){
+  return monthlyDocsFor(id).sort((a,b) => periodKey(b.period) - periodKey(a.period) || (b.savedAt||0) - (a.savedAt||0))[0] || null;
+}
+function invoiceFor(id, p){
+  return monthlyDocsFor(id).find(d => periodKey(d.period) === periodKey(p)) || null;
+}
+const clientTitle = cl => cl.company || cl.name || 'Untitled client';
+
+function renderClients(){
+  const wrap = $('#ccards');
+  const addCard =
+    '<button class="ccard add" data-addclient>' +
+      '<span class="plus">+</span>' +
+      '<span>' + (clients.length ? 'Add another client' : 'Add your first monthly client') +
+      '<small>Retainers, maintenance, hosting. Anyone you bill every month.</small></span>' +
+    '</button>';
+
+  wrap.innerHTML = clients.map(cl => {
+    const last = lastInvoiceFor(cl.id);
+    const p = last ? nextPeriod(last.period) : thisPeriod();
+    const sub = [cl.company && cl.name ? cl.name : '', cl.service].filter(Boolean).join(' · ');
+    const lastLine = last
+      ? 'Last: <b>' + esc(periodLabel(last.period)) + '</b> · ' + esc(money(compute(last).dueNow, last.currency))
+      : 'No invoices yet';
+    return '<article class="ccard" data-cid="' + esc(cl.id) + '">' +
+      '<div class="ccard-top">' +
+        '<span class="avatar">' + esc(initials(clientTitle(cl))) + '</span>' +
+        '<div class="ccard-who"><h3>' + esc(clientTitle(cl)) + '</h3><p>' + esc(sub || 'Monthly services') + '</p></div>' +
+        '<button class="btn btn-sm btn-ghost" data-edit-client="' + esc(cl.id) + '">Edit</button>' +
+      '</div>' +
+      '<div class="ccard-gen">' +
+        '<div class="field"><label>Month</label><select class="ctl" data-k="m">' + monthOptions(p.m) + '</select></div>' +
+        '<div class="field"><label>Year</label><select class="ctl" data-k="y">' + yearOptions(p.y) + '</select></div>' +
+        '<div class="field amt-field"><label>Amount (' + esc(cl.currency) + ')</label>' +
+          '<input class="ctl num" data-k="amt" type="number" min="0" step="0.01" value="' + (Number(cl.amount) || '') + '" placeholder="0.00"></div>' +
+      '</div>' +
+      '<p class="ccard-status" data-status></p>' +
+      '<div class="ccard-foot">' +
+        '<span class="ccard-last">' + lastLine + '</span>' +
+        '<button class="btn btn-accent btn-sm" data-gen>Generate invoice</button>' +
+      '</div>' +
+    '</article>';
+  }).join('') + addCard;
+
+  $$('#ccards .ccard[data-cid]').forEach(updateCardStatus);
+}
+
+const cardPeriod = card => ({y:+card.querySelector('[data-k="y"]').value, m:+card.querySelector('[data-k="m"]').value});
+
+function updateCardStatus(card){
+  const cl = clients.find(c => c.id === card.dataset.cid);
+  if(!cl) return;
+  const p = cardPeriod(card);
+  const amt = parseFloat(card.querySelector('[data-k="amt"]').value) || 0;
+  const dup = invoiceFor(cl.id, p);
+  const st = card.querySelector('[data-status]');
+  const btn = card.querySelector('[data-gen]');
+  if(dup){
+    st.className = 'ccard-status warn';
+    st.innerHTML = 'Already invoiced for ' + esc(periodLabel(p)) + ' (' + esc(dup.number) + '). ' +
+      '<button class="link" data-open-doc="' + esc(dup.id) + '">Open it</button>';
+    btn.textContent = 'Generate another';
+  } else {
+    const tax = Number(cl.taxRate) || 0;
+    st.className = 'ccard-status';
+    st.textContent = (tax > 0 && amt > 0)
+      ? 'Client pays ' + money(amt * (1 + tax / 100), cl.currency) + ' with ' + (profile.taxLabel || 'tax') + ' at ' + tax + '%'
+      : '';
+    btn.textContent = 'Generate invoice';
+  }
+}
+
+function generateFor(card){
+  const cl = clients.find(c => c.id === card.dataset.cid);
+  if(!cl) return;
+  const p = cardPeriod(card);
+  const amtEl = card.querySelector('[data-k="amt"]');
+  const amt = parseFloat(amtEl.value);
+  if(!(amt > 0)){ toast('Enter this month\u2019s amount first'); amtEl.focus(); return; }
+  const d = docFromClient(cl, p, amt);
+  if(!persistDoc(d)) return;
+  openEditor(JSON.parse(JSON.stringify(d)));
+  toast(d.number + ' is ready for ' + periodLabel(p));
+}
+
+/* ------------------------------------------------------------ client setup */
+const CL_MAP = {
+  clName:'name', clCompany:'company', clEmail:'email', clPhone:'phone', clAddr:'addr',
+  clService:'service', clDetail:'detail', clAmount:'amount', clCurrency:'currency',
+  clTax:'taxRate', clPayDays:'payDays', clNotes:'notes'
+};
+const CL_NUM = new Set(['amount', 'taxRate', 'payDays']);
+
+function blankClient(){
+  return {
+    id: newId('c'), name:'', company:'', email:'', phone:'', addr:'',
+    service:'', detail:'', amount:0, currency: profile.currency,
+    taxRate: Number(profile.taxRate) || 0, payDays: Number(profile.payDays) || 0, notes:''
+  };
+}
+
+function openClient(id){
+  const existing = clients.find(c => c.id === id);
+  clientDraft = existing ? JSON.parse(JSON.stringify(existing)) : blankClient();
+  $('#clTitle').textContent = existing ? 'Edit ' + clientTitle(existing) : 'New monthly client';
+  $('#btnDelClient').hidden = !existing;
+  Object.keys(CL_MAP).forEach(elId => { const v = clientDraft[CL_MAP[elId]]; $('#' + elId).value = v == null ? '' : v; });
+  paintClientPreview();
+  go('client');
+  if(!existing) setTimeout(() => $('#clName').focus(), 0);
+}
+
+function paintClientPreview(){
+  const d = docFromClient(clientDraft, thisPeriod(), clientDraft.amount);
+  $('#clDoc').innerHTML = renderDoc(d);
+  $('#clLineEg').textContent = d.items[0].desc;
+  $('#lblClAmount').textContent = 'Usual monthly amount (' + clientDraft.currency + ')';
+  $('#lblClTax').textContent = (profile.taxLabel || 'Tax') + ' rate (%)';
+}
+
+function saveClient(){
+  if(!clientDraft) return;
+  if(!clientDraft.name.trim() && !clientDraft.company.trim()){ toast('Add a client name or company first'); $('#clName').focus(); return; }
+  const copy = JSON.parse(JSON.stringify(clientDraft));
+  const next = clients.slice();
+  const i = next.findIndex(c => c.id === copy.id);
+  if(i >= 0) next[i] = copy; else next.push(copy);
+  if(!save(KEY.clients, next)){ toast('Couldn\u2019t save. This browser\u2019s storage is full.'); return; }
+  clients = next;
+  go('monthly');
+  toast(clientTitle(copy) + ' saved');
+}
+
+function bindMonthly(){
+  $('.monthly-head [data-addclient]').addEventListener('click', () => openClient(null));
+
+  const cards = $('#ccards');
+  cards.addEventListener('input',  e => { const c = e.target.closest('.ccard[data-cid]'); if(c) updateCardStatus(c); });
+  cards.addEventListener('change', e => { const c = e.target.closest('.ccard[data-cid]'); if(c) updateCardStatus(c); });
+  cards.addEventListener('keydown', e => {
+    if(e.key === 'Enter' && e.target.matches('[data-k="amt"]')){ e.preventDefault(); generateFor(e.target.closest('.ccard')); }
+  });
+  cards.addEventListener('click', e => {
+    const t = e.target;
+    if(t.closest('[data-addclient]')) return openClient(null);
+    const edit = t.closest('[data-edit-client]');
+    if(edit) return openClient(edit.dataset.editClient);
+    const open = t.closest('[data-open-doc]');
+    if(open){
+      const d = docs.find(x => x.id === open.dataset.openDoc);
+      if(d) openEditor(JSON.parse(JSON.stringify(d)));
+      return;
+    }
+    if(t.closest('[data-gen]')) generateFor(t.closest('.ccard'));
+  });
+
+  Object.keys(CL_MAP).forEach(elId => {
+    $('#' + elId).addEventListener('input', e => {
+      const k = CL_MAP[elId];
+      clientDraft[k] = CL_NUM.has(k) ? (e.target.value === '' ? '' : (parseFloat(e.target.value) || 0)) : e.target.value;
+      paintClientPreview();
+    });
+  });
+
+  $('#btnSaveClient').addEventListener('click', saveClient);
+  $('#btnDelClient').addEventListener('click', () => {
+    if(!clientDraft) return;
+    const name = clientTitle(clientDraft);
+    if(!confirm('Remove ' + name + '? Invoices you\u2019ve already made for them stay in your history.')) return;
+    const next = clients.filter(c => c.id !== clientDraft.id);
+    if(!save(KEY.clients, next)){ toast('Couldn\u2019t save. This browser\u2019s storage is full.'); return; }
+    clients = next;
+    go('monthly');
+    toast(name + ' removed');
+  });
+}
+
 /* ------------------------------------------------------------ nav */
 function go(name){
   $$('.screen').forEach(s => s.classList.remove('is-active'));
   $('#screen-' + name).classList.add('is-active');
   if(name === 'home') renderRecent();
   if(name === 'settings') fillSettings();
+  if(name === 'monthly') renderClients();
   window.scrollTo({top:0});
 }
 
@@ -1561,6 +2050,7 @@ function init(){
   $('#greeting').textContent = greeting();
   bindEditor();
   bindSettings();
+  bindMonthly();
 
   $$('[data-go]').forEach(b => b.addEventListener('click', () => go(b.dataset.go)));
   $$('[data-new]').forEach(b => b.addEventListener('click', () => openEditor(blankDoc(b.dataset.new))));
@@ -1569,6 +2059,7 @@ function init(){
     const open = e.target.closest('[data-open]');
     const copy = e.target.closest('[data-copy]');
     const rm   = e.target.closest('[data-rm]');
+    if(e.target.closest('[data-showall]')){ showAllRecent = !showAllRecent; renderRecent(); return; }
     if(open){
       const d = docs.find(x => x.id === open.dataset.open);
       if(d) openEditor(JSON.parse(JSON.stringify(d)));
@@ -1576,7 +2067,7 @@ function init(){
       const src = docs.find(x => x.id === copy.dataset.copy);
       if(!src) return;
       const d = JSON.parse(JSON.stringify(src));
-      d.id = 'd' + Date.now().toString(36) + Math.random().toString(36).slice(2,6);
+      d.id = newId('d');
       d.number = nextNumber(d.type);
       d.issue = todayISO();
       d.due = addDaysISO(d.issue, d.type === 'proforma' ? profile.validDays : profile.payDays);
@@ -1595,9 +2086,9 @@ function init(){
   document.addEventListener('keydown', e => {
     const cmd = e.metaKey || e.ctrlKey;
     if(!cmd) return;
-    if(e.key.toLowerCase() === 's' && state && $('#screen-editor').classList.contains('is-active')){
-      e.preventDefault(); saveDoc();
-    }
+    if(e.key.toLowerCase() !== 's') return;
+    if(state && $('#screen-editor').classList.contains('is-active')){ e.preventDefault(); saveDoc(); }
+    else if($('#screen-client').classList.contains('is-active')){ e.preventDefault(); saveClient(); }
   });
 
   renderRecent();
